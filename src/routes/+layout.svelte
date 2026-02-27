@@ -77,13 +77,20 @@
 </div>
 
 <style>
+  :global(html, body)  {
+    overflow-x: clip;
+
+  }
+
   .layout {
     display: grid;
     grid-template-rows: auto 1fr auto;
     min-height: 100vh;
     width: 100%;
     max-width: 100vw;
-    overflow-x: hidden;
+    /* clip instead of hidden: visually prevents horizontal overflow
+       without creating a scroll container, so position:sticky works */
+
   }
   
   .inner {
@@ -91,7 +98,6 @@
     grid-template-columns: 1fr;
     width: 100%;
     max-width: 100vw;
-    overflow-x: hidden;
   }
   
   .content {

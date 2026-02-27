@@ -13,29 +13,38 @@ html, body {
 }
 
 [data-theme="dark"] {
-  --bg-primary: #0a0612;
-  --bg-secondary: #14101d;
-  --bg-code: #1a1625;
-  --text-primary: #ffffff;
-  --text-secondary: rgba(255, 255, 255, 0.7);
-  --text-code: #e0e0e0;
-  --border-color: rgba(255, 255, 255, 0.1);
-  --accent: #a855f7;
-  --gradient-start: rgba(179, 27, 27, 0.9);
-  --gradient-end: #631AA3;
+  --bg-primary: #140E24;
+  --bg-secondary: #1C1530;
+  --bg-code: #211938;
+
+  --text-primary: #F5F2FF;
+  --text-secondary: rgba(245, 242, 255, 0.65);
+  --text-code: #E6DFFF;
+
+  --border-color: rgba(200, 182, 255, 0.12);
+
+  --accent: #C8B6FF;
+
+  /* Burnt + cosmic */
+  --gradient-start: #C7782B;   /* burnt core */
+  --gradient-end: #4B2E83;     /* cosmic violet */
 }
 
 [data-theme="light"] {
-  --bg-primary: #ffffff;
-  --bg-secondary: #f5f5f5;
-  --bg-code: #f8f8f8;
-  --text-primary: #1a1a1a;
-  --text-secondary: rgba(0, 0, 0, 0.7);
-  --text-code: #2d2d2d;
-  --border-color: rgba(0, 0, 0, 0.1);
-  --accent: #7d2cc5;
-  --gradient-start: rgba(220, 50, 50, 0.9);
-  --gradient-end: #7d2cc5;
+  --bg-primary: #FBF8F3;       /* slight warm bias */
+  --bg-secondary: #F2ECE6;
+  --bg-code: #F6F1EB;
+
+  --text-primary: #2A1F45;
+  --text-secondary: rgba(42, 31, 69, 0.65);
+  --text-code: #3A2A63;
+
+  --border-color: rgba(75, 46, 131, 0.12);
+
+  --accent: #4B2E83;
+
+  --gradient-start: #C7782B;
+  --gradient-end: #4B2E83;
 }
 
 body {

@@ -54,8 +54,18 @@
 </footer>
 
 <style>
+  /* Footer background: calm suspended wash (cosmic violet + burnt core) */
   .footer {
-    background: linear-gradient(135deg, rgba(168, 85, 247, 0.05) 0%, rgba(201, 42, 42, 0.05) 100%);
+    background:
+      radial-gradient(900px 420px at 20% 20%,
+        rgba(75, 46, 131, 0.10),
+        transparent 60%),
+      radial-gradient(900px 420px at 85% 30%,
+        rgba(199, 120, 43, 0.08),
+        transparent 60%),
+      linear-gradient(180deg,
+        rgba(75, 46, 131, 0.04),
+        rgba(199, 120, 43, 0.02));
     border-top: 1px solid var(--border-color);
     padding: 60px 20px 20px;
     margin-top: auto;
@@ -75,7 +85,9 @@
     font-size: 1.5rem;
     font-weight: 700;
     margin: 0 0 12px 0;
-    background: linear-gradient(135deg, #a855f7 0%, #c92a2a 100%);
+
+    /* Match logo gradient */
+    background: linear-gradient(135deg, #4B2E83 0%, #C7782B 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -93,7 +105,7 @@
     color: var(--text-secondary);
     line-height: 1.6;
     margin: 0 0 20px 0;
-    max-width: 300px;
+    max-width: 320px;
   }
 
   .social-links {
@@ -101,23 +113,26 @@
     gap: 12px;
   }
 
+  /* GitHub button: calm glass, icon stays black always */
   .social-links a {
     display: flex;
     align-items: center;
     justify-content: center;
     width: 40px;
     height: 40px;
-    background: var(--bg-secondary);
+
+    background: rgba(200, 182, 255, 0.10);
     border: 1px solid var(--border-color);
     border-radius: 50%;
-    color: var(--text-primary);
-    transition: all 0.2s ease;
+
+    color: #000; /* ALWAYS black */
+    transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+    backdrop-filter: blur(10px);
   }
 
   .social-links a:hover {
-    background: var(--accent);
-    color: white;
-    border-color: var(--accent);
+    background: rgba(200, 182, 255, 0.16);
+    border-color: rgba(200, 182, 255, 0.35);
     transform: translateY(-2px);
   }
 

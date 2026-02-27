@@ -31,38 +31,27 @@
   
   function scrollToSection(id: string) {
     const element = document.getElementById(id);
-    if (element) {
-      const topbarHeight = 70;
-      const elementPosition = element.getBoundingClientRect().top + window.scrollY;
-      const offsetPosition = elementPosition - topbarHeight;
-      
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: 'smooth'
-      });
-    }
+    if (!element) return;
+
+    const topbarHeight = 70;
+    const elementPosition = element.getBoundingClientRect().top + window.scrollY;
+    const offsetPosition = elementPosition - topbarHeight;
+    
+    window.scrollTo({
+      top: offsetPosition,
+      behavior: 'smooth'
+    });
   }
   
-  // Code examples
-  const quickshellExample = `
-  stasis:
-    ...
-    lock-detection-type "logind"
-
-    lock-screen:
-      command "qs -c noctalia-shell ipc call lockScreen lock"
-    end
-  end
-`;
-
+  // Waybar examples
   const waybarIconCode = `"custom/stasis": {
   "exec": "stasis info --json",
   "format": "{icon}",
   "format-icons": {
-      "idle_active": "",
-      "idle_inhibited": "",
-      "manually_inhibited": "",
-      "not_running": "󰒲"
+    "idle_active": "",
+    "idle_inhibited": "",
+    "manually_inhibited": "",
+    "not_running": "󰒲"
   },
   "tooltip": true,
   "on-click": "stasis toggle-inhibit",
@@ -89,6 +78,7 @@
       {#each sections as section}
         <li>
           <button
+            type="button"
             class:active={activeSection === section.id}
             onclick={() => scrollToSection(section.id)}
           >
@@ -105,25 +95,25 @@
     <section id="quickshell">
       <h2>Quickshell</h2>
 
-      <h3>Example config</h3>
-      <p>To use stasis with <a href="https://www.quickshell.org">Quickshell</a> the required edits are needed<br />
-         Note: The bellow config is using <a href="https://github.com/noctalia-dev/noctalia-shell">Noctalia shell</a>
+      <p>
+        Quickshell integration is pending upstream support.
       </p>
-      <CodeBlock code={quickshellExample} language="rune"/>
-
     </section>
     
     <section id="waybar">
       <h2>Waybar</h2>
       
       <h3>Example Custom Module</h3>
-      <p>To use Stasis with waybar is fairly straightforward. Below is an example custom module for waybar:</p>
+      <p>
+        To use Stasis with Waybar, define a custom module that polls
+        <code>stasis info --json</code>.
+      </p>
       
       <h4>Icon-based Display</h4>
       <CodeBlock code={waybarIconCode} language="json" />
 
       <h4>Text-based Display</h4>
-      <p>Or you can just display text if you don't want icons:</p>
+      <p>Or display text instead of icons:</p>
       <CodeBlock code={waybarTextCode} language="json" />
     </section>
   </main>
@@ -236,11 +226,6 @@ p {
   margin: 16px 0;
 }
 
-a {
-  text-decoration: none;
-  color: var(--accent);
-}
-
 /* === MOBILE === */
 @media (max-width: 768px) {
   .page-container {
@@ -254,11 +239,6 @@ a {
     border-bottom: 1px solid var(--border-color);
     padding-bottom: 16px;
     margin-bottom: 8px;
-  }
-
-  .nav-title {
-    font-size: 0.8rem;
-    margin-bottom: 10px;
   }
 
   .links-nav ul {
@@ -281,28 +261,8 @@ a {
     border-bottom-color: var(--accent);
     background: rgba(168, 85, 247, 0.1);
   }
-
-  h1 {
-    font-size: 2rem;
-    margin-bottom: 24px;
-  }
-
-  h2 {
-    font-size: 1.4rem;
-    margin: 32px 0 12px 0;
-    scroll-margin-top: 100px;
-  }
-
-  h3 {
-    font-size: 1.3rem;
-  }
-
-  h4 {
-    font-size: 1.05rem;
-  }
 }
 
-/* === TINY DEVICES === */
 @media (max-width: 480px) {
   .page-container {
     padding: 70px 12px 20px;
@@ -310,19 +270,6 @@ a {
 
   .links-nav ul {
     grid-template-columns: 1fr;
-  }
-
-  .links-nav button {
-    padding: 8px 10px;
-    font-size: 0.75rem;
-  }
-
-  h1 {
-    font-size: 1.75rem;
-  }
-
-  h2 {
-    font-size: 1.25rem;
   }
 }
 </style>

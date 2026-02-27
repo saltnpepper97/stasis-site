@@ -92,7 +92,7 @@ cd stasis`;
  
 <p class="welcome-text">
   Contributions make Stasis better for everyone! 💜 <br /> <br />
-  Please read our <a href="https://github.com/saltnpepper97/stasis/blob/main/CONTRIBUTING.md" target="_blank">GitHub Contributing Guidelines</a> before submitting anything.<br /><br />
+  Please read our <a href="https://github.com/saltnpepper97/stasis?tab=readme-ov-file#contributing" target="_blank">GitHub Contributing Guidelines</a> before submitting anything.<br /><br />
 
   <strong>Important:</strong><br />
   - All new features, enhancements, or other contributions (except packaging or compositor work) must first go through an issue or bug report.<br />  

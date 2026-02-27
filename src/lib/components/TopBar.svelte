@@ -6,18 +6,16 @@
   let theme: Theme = 'auto';
 
   onMount(() => {
-    // Check for saved theme preference or default to auto
     const savedTheme = localStorage.getItem('theme') as Theme;
     theme = savedTheme || 'auto';
     applyTheme();
 
-    // Listen for system theme changes when in auto mode
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    mediaQuery.addEventListener('change', () => {
-      if (theme === 'auto') {
-        applyTheme();
-      }
-    });
+    const handler = () => { if (theme === 'auto') applyTheme(); };
+
+    mediaQuery.addEventListener('change', handler);
+
+    return () => mediaQuery.removeEventListener('change', handler);
   });
 
   function toggleTheme() {
@@ -90,185 +88,199 @@
 </div>
 
 <style>
-  .material-symbols-outlined {
-    font-family: 'Material Symbols Outlined';
-    font-weight: normal;
-    font-style: normal;
-    font-size: 24px;
-    line-height: 1;
-    letter-spacing: normal;
-    text-transform: none;
-    display: inline-block;
-    white-space: nowrap;
-    word-wrap: normal;
-    direction: ltr;
-    -webkit-font-smoothing: antialiased;
-  }
+.material-symbols-outlined {
+  font-family: 'Material Symbols Outlined';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-smoothing: antialiased;
+}
 
-  .title {
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 28px;
-    text-decoration: none;
-    color: #ffffff;
-  }
+/* Default title style (outside topbar, if ever reused) */
+.title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 28px;
+  text-decoration: none;
+  color: var(--text-primary);
+  letter-spacing: 0.5px;
+}
 
+.topbar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 100;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  background: linear-gradient(
+    135deg,
+    var(--gradient-end),
+    var(--gradient-start)
+  );
+  padding: 12px 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  gap: 32px;
+}
+
+/* ===== Topbar text should always be white (both themes) ===== */
+.topbar .title {
+  color: #fff;
+}
+
+.topbar .brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: #fff;
+  white-space: nowrap;
+}
+
+nav {
+  display: flex;
+  justify-content: center;
+}
+
+ul {
+  display: flex;
+  list-style: none;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+}
+
+li {
+  display: flex;
+  align-items: center;
+}
+
+/* Links always white-ish on the gradient */
+nav a {
+  display: flex;
+  text-decoration: none;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.9);
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-weight: 500;
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+nav a:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+  color: #fff;
+}
+
+nav a::after {
+  content: '';
+  position: absolute;
+  bottom: 4px;
+  left: 50%;
+  transform: translateX(-50%) scaleX(0);
+  width: 80%;
+  height: 2px;
+  background: #fff;
+  transition: transform 0.2s ease;
+}
+
+nav a:hover::after {
+  transform: translateX(-50%) scaleX(1);
+}
+
+.links {
+  display: flex;
+  gap: 12px;
+}
+
+/* ===== Theme toggle: icon changes with theme (set via data-theme) ===== */
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(200, 182, 255, 0.14); /* lavender tint */
+  padding: 8px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(10px);
+}
+
+/* Default (dark) icon color: white */
+:global([data-theme="dark"]) .theme-toggle {
+  color: #fff;
+}
+
+:global([data-theme="light"]) .theme-toggle {
+  color: #111;
+}
+
+.theme-toggle:hover {
+  background-color: rgba(200, 182, 255, 0.22);
+  transform: scale(1.1);
+}
+
+/* ===== GitHub: always black icon (both themes) ===== */
+.github {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(200, 182, 255, 0.14); /* same pill/glass */
+  padding: 8px;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: #000; /* ALWAYS black */
+}
+
+.github:hover {
+  background-color: rgba(200, 182, 255, 0.22);
+  transform: scale(1.1);
+}
+
+.github svg {
+  display: block;
+}
+
+@media (max-width: 768px) {
   .topbar {
-    position: fixed;
-    top: 0;
-    width: 100%;
-    z-index: 100;
-    display: grid;
-    grid-template-columns: auto 1fr auto;
-    align-items: center;
-    background: linear-gradient(
-      135deg,
-      #c92a2a,
-      #631AA3
-    );
-    padding: 12px 24px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-    gap: 32px;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding: 16px;
   }
-
 
   .brand {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-weight: 700;
-    font-size: 1.1rem;
-    color: #fff;
-    white-space: nowrap;
-  }
-
-  .title {
-    letter-spacing: 0.5px;
+    justify-content: center;
   }
 
   nav {
-    display: flex;
-    justify-content: center;
+    overflow-x: auto;
   }
 
   ul {
-    display: flex;
-    list-style: none;
-    gap: 8px;
-    margin: 0;
-    padding: 0;
-  }
-
-  li {
-    display: flex;
-    align-items: center;
+    gap: 4px;
   }
 
   nav a {
-    display: flex;
-    text-decoration: none;
-    align-items: center;
-    justify-content: center;
-    color: rgba(255, 255, 255, 0.9);
-    padding: 8px 16px;
-    border-radius: 6px;
-    font-weight: 500;
-    font-size: 0.95rem;
-    transition: all 0.2s ease;
-    position: relative;
-  }
-
-  nav a:hover {
-    background-color: rgba(255, 255, 255, 0.15);
-    color: #fff;
-  }
-
-  nav a::after {
-    content: '';
-    position: absolute;
-    bottom: 4px;
-    left: 50%;
-    transform: translateX(-50%) scaleX(0);
-    width: 80%;
-    height: 2px;
-    background: #fff;
-    transition: transform 0.2s ease;
-  }
-
-  nav a:hover::after {
-    transform: translateX(-50%) scaleX(1);
+    padding: 6px 12px;
+    font-size: 0.9rem;
   }
 
   .links {
-    display: flex;
-    gap: 12px;
-  }
-
-  .theme-toggle {
-    display: flex;
-    align-items: center;
     justify-content: center;
-    background-color: rgba(255, 255, 255, 0.2);
-    padding: 8px;
-    border-radius: 50%;
-    border: none;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    backdrop-filter: blur(10px);
-    color: #fff;
   }
-
-  .theme-toggle:hover {
-    background-color: rgba(255, 255, 255, 0.3);
-    transform: scale(1.1);
-  }
-
-  .github {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: rgba(255, 255, 255, 0.2);
-    padding: 8px;
-    border-radius: 50%;
-    transition: all 0.2s ease;
-    backdrop-filter: blur(10px);
-    color: #fff;
-  }
-
-  .github:hover {
-    background-color: rgba(255, 255, 255, 0.3);
-    transform: scale(1.1);
-  }
-
-  .github svg {
-    display: block;
-  }
-
-  @media (max-width: 768px) {
-    .topbar {
-      grid-template-columns: 1fr;
-      gap: 16px;
-      padding: 16px;
-    }
-
-    .brand {
-      justify-content: center;
-    }
-
-    nav {
-      overflow-x: auto;
-    }
-
-    ul {
-      gap: 4px;
-    }
-
-    nav a {
-      padding: 6px 12px;
-      font-size: 0.9rem;
-    }
-
-    .links {
-      justify-content: center;
-    }
-  }
+}
 </style>

@@ -5,8 +5,6 @@
   let activeSection = $state('');
   
   const sections = [
-    { id: 'prerequisites', title: 'Prerequisites' },
-    { id: 'group-setup', title: 'Group Setup' },
     { id: 'manual', title: 'Running Manually' },
     { id: 'systemd', title: 'Systemd Service' },
   ];
@@ -101,56 +99,7 @@ systemctl --user enable --now stasis.service`;
   
   <main class="content">
     <h1>Quick Start</h1>
-    
-    <section id="prerequisites">
-      <h2>Prerequisites</h2>
-      <div class="warning">
-        <strong>⚠️ Required:</strong> Before running Stasis, you must configure the proper user groups:
-        <ul>
-          <li><strong>All users:</strong> Must be in the <code>input</code> group</li>
-          <li><strong>Laptop users:</strong> Must also be in the <code>video</code> group (for brightness control)</li>
-        </ul>
-      </div>
-      
-      <p>
-        Stasis requires access to input devices to monitor idle activity and brightness controls on laptops.
-        Without these group memberships, Stasis will fail to start or function properly.
-      </p>
-    </section>
-    
-    <section id="group-setup">
-      <h2>Group Setup</h2>
-      
-      <h3>Check Current Groups</h3>
-      <p>First, check which groups you're currently in:</p>
-      <CodeBlock code="groups $USER" />
-      
-      <p>You should see output like:</p>
-      <CodeBlock code="dustin : dustin wheel audio input video storage" />
-      
-      <h3>Add Missing Groups</h3>
-      <p>If <code>input</code> is missing, add yourself:</p>
-      <CodeBlock code="sudo usermod -aG input $USER" />
-      
-      <p>If you're on a laptop and <code>video</code> is missing, add it as well:</p>
-      <CodeBlock code="sudo usermod -aG video $USER" />
-      
-      <p>Or add both at once:</p>
-      <CodeBlock code="sudo usermod -aG input,video $USER" />
-      
-      <div class="warning">
-        <strong>⚠️ Important:</strong> After adding groups, you must log out and log back in (or restart your computer) for the changes to take effect. The service will not work until you do this.
-      </div>
-      
-      <p>After logging back in, verify the groups were added:</p>
-      <CodeBlock code="groups $USER" />
-
-      <div class="note">
-        <strong>📝 Note:</strong> On first run, Stasis automatically generates a configuration file at 
-        <code>$XDG_CONFIG_HOME/stasis/stasis.rune</code> (typically <code>~/.config/stasis/stasis.rune</code>).
-      </div>
-    </section>
-    
+ 
     <section id="manual">
       <h2>Running Manually</h2>
       <p>
