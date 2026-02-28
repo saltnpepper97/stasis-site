@@ -56,6 +56,20 @@
 
   // --- Code examples (RUNE) ---
 
+const preSuspendDaemonizeCode = `# Recommended pattern when using pre_suspend_command:
+# - start the locker right before suspend
+# - daemonize suspend so the locker can appear first
+
+pre_suspend_command "hyprlock"
+
+suspend:
+  timeout 1800
+  command "daemonize systemctl suspend"
+end
+
+# If you already lock as a plan step, prefer this instead:
+#pre_suspend_command None`;
+
   const globalsCode = `@author "Your Name"
 @description "Stasis configuration"
 
@@ -123,7 +137,8 @@ end`;
   const enableLoginctlCode = `# Enable global login1 tracking (lock/unlock state)
 enable_loginctl true`;
 
-  const preSuspendCode = `# Run before suspending (e.g. ensure screen is locked first)
+const preSuspendCode = `# Run before suspending (e.g. ensure screen is locked first)
+# Tip: if you rely on this for locking, daemonize suspend so the lock can appear.
 pre_suspend_command "hyprlock"
 
 # Disable:
@@ -586,6 +601,19 @@ end
         before the system sleeps:
       </p>
       <CodeBlock code={preSuspendCode} language="rune" />
+      <div class="warning">
+        <strong>Important: use daemonize for pre-suspend locks</strong>
+        <p>
+          <code>pre_suspend_command</code> is intended for lockers that must start <em>right before</em> suspend.
+          To actually give the locker time to appear, the suspend command should be launched in the background
+          (for example via <code>daemonize</code>), otherwise the system may suspend immediately.
+        </p>
+        <p>
+          If your plan already includes a <code>lock_screen:</code> step (which Stasis runs and waits on), you
+          usually do <strong>not</strong> need <code>pre_suspend_command</code>.
+        </p>
+      </div>
+      <CodeBlock code={preSuspendDaemonizeCode} language="rune" />
     </section>
 
     <section id="media">
