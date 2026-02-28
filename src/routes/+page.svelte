@@ -4,7 +4,7 @@
 
 <div class="hero">
   <div class="hero-content">
-    <img src="/favicon.png" alt="Stasis Logo" class="logo" />
+    <img src="{base}/favicon.png" alt="Stasis Logo" class="logo" />
     <h1>Stasis</h1>
     <p class="tagline">A modern Wayland idle manager that knows when to step back.</p>
     <p class="subtitle">Keep your session in perfect balance—automatically preventing idle when it matters, allowing it when it doesn't.</p>
