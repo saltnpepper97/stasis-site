@@ -1,17 +1,18 @@
 <script lang="ts">
   import { page } from '$app/state';
+  import { base } from '$app/paths';
 
   const pages = [
-    { label: 'Home',          href: '/' },
-    { label: 'Quick Start',   href: '/quick-start' },
-    { label: 'Configuration', href: '/configuration' },
-    { label: 'Integration',   href: '/integration' },
-    { label: 'Contributing',  href: '/contributing' },
-    { label: 'FAQ',           href: '/faq' },
+    { label: 'Home',          href: `${base}/` },
+    { label: 'Quick Start',   href: `${base}/quick-start` },
+    { label: 'Configuration', href: `${base}/configuration` },
+    { label: 'Integration',   href: `${base}/integration` },
+    { label: 'Contributing',  href: `${base}/contributing` },
+    { label: 'FAQ',           href: `${base}/faq` },
   ];
 
   const currentIndex = $derived(
-    pages.findIndex(p => p.href === page.route.id?.replace('/src/routes', '') || p.href === (page.url?.pathname ?? '/'))
+    pages.findIndex(p => p.href === ((page.url?.pathname ?? '/').replace(/\/$/, '') || '/'))
   );
 
   const prev = $derived(currentIndex > 0 ? pages[currentIndex - 1] : null);
@@ -19,6 +20,7 @@
 </script>
 
 <nav class="page-nav">
+  <!-- Desktop layout -->
   <div class="nav-inner">
     {#if prev}
       <a href={prev.href} class="nav-btn prev">
@@ -56,6 +58,39 @@
       <div></div>
     {/if}
   </div>
+
+  <!-- Mobile layout: full-width stacked buttons + centered dots -->
+  <div class="nav-mobile">
+    {#if prev}
+      <a href={prev.href} class="nav-btn-mobile prev">
+        <span class="arrow">←</span>
+        <span class="nav-text">
+          <span class="nav-label">Previous</span>
+          <span class="nav-title">{prev.label}</span>
+        </span>
+      </a>
+    {/if}
+    {#if next}
+      <a href={next.href} class="nav-btn-mobile next">
+        <span class="nav-text">
+          <span class="nav-label">Next</span>
+          <span class="nav-title">{next.label}</span>
+        </span>
+        <span class="arrow">→</span>
+      </a>
+    {/if}
+    <div class="page-dots-mobile">
+      {#each pages as p, i}
+        <a
+          href={p.href}
+          class="dot"
+          class:active={i === currentIndex}
+          title={p.label}
+          aria-label={p.label}
+        ></a>
+      {/each}
+    </div>
+  </div>
 </nav>
 
 <style>
@@ -66,6 +101,7 @@
     border-top: 1px solid var(--border-color);
   }
 
+  /* ── Desktop ── */
   .nav-inner {
     display: grid;
     grid-template-columns: 1fr auto 1fr;
@@ -84,26 +120,22 @@
     background: var(--bg-secondary);
     color: var(--text-primary);
     transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
-    min-width: 160px;
     max-width: 220px;
   }
 
   .nav-btn:hover {
     border-color: var(--accent);
     transform: translateY(-2px);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 16px color-mix(in srgb, var(--accent) 12%, transparent);
   }
 
   .nav-btn.next {
-    margin-left: auto;
+    justify-self: end;
     justify-content: flex-end;
     text-align: right;
   }
 
-  .nav-btn.prev {
-    text-align: left;
-  }
-
+  /* ── Shared text ── */
   .nav-text {
     display: flex;
     flex-direction: column;
@@ -131,14 +163,10 @@
     transition: transform 0.2s ease;
   }
 
-  .nav-btn.prev:hover .arrow {
-    transform: translateX(-3px);
-  }
+  .nav-btn.prev:hover .arrow { transform: translateX(-3px); }
+  .nav-btn.next:hover .arrow { transform: translateX(3px); }
 
-  .nav-btn.next:hover .arrow {
-    transform: translateX(3px);
-  }
-
+  /* ── Dots ── */
   .page-dots {
     display: flex;
     align-items: center;
@@ -166,18 +194,59 @@
     transform: scale(1.3);
   }
 
+  /* ── Mobile (hidden on desktop) ── */
+  .nav-mobile {
+    display: none;
+  }
+
   @media (max-width: 600px) {
-    .page-dots {
+    .nav-inner {
       display: none;
     }
 
-    .nav-btn {
-      min-width: 0;
-      padding: 0.75rem 1rem;
+    .nav-mobile {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
     }
 
-    .nav-title {
-      font-size: 0.875rem;
+    .nav-btn-mobile {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.875rem 1.125rem;
+      border-radius: 10px;
+      text-decoration: none;
+      border: 1px solid var(--border-color);
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      width: 100%;
+    }
+
+    .nav-btn-mobile:hover {
+      border-color: var(--accent);
+      box-shadow: 0 4px 16px color-mix(in srgb, var(--accent) 12%, transparent);
+    }
+
+    .nav-btn-mobile.next {
+      justify-content: space-between;
+      text-align: right;
+    }
+
+    .nav-btn-mobile.prev:hover .arrow { transform: translateX(-3px); }
+    .nav-btn-mobile.next:hover .arrow { transform: translateX(3px); }
+
+    .page-dots-mobile {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      padding-top: 0.5rem;
+    }
+
+    .page-dots-mobile .dot {
+      width: 8px;
+      height: 8px;
     }
   }
 </style>
