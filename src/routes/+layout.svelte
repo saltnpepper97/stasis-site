@@ -7,7 +7,6 @@
   import Footer from '$lib/components/Footer.svelte';
   import { afterNavigate } from '$app/navigation';
   import { page } from '$app/state';
-  import { base } from '$app/paths';
   
   let { children } = $props();
   
@@ -43,9 +42,7 @@
   });
 </script>
 
-<svelte:head>
-  <link rel="icon" href="{base}/favicon.ico" />
-</svelte:head>
+
 
 <div class="layout">
   <!-- Hamburger menu button (mobile only) -->

@@ -12,7 +12,6 @@ const config = {
     }),
 
     paths: {
-      base: '/stasis'
     },
 
     prerender: {

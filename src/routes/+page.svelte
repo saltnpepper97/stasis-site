@@ -1,17 +1,15 @@
 <script lang="ts">
-  import { base } from '$app/paths';
-  import stasisLogo from '$lib/assets/favicon.png';
 </script>
 
 <div class="hero">
   <div class="hero-content">
-    <img src={stasisLogo} alt="Stasis Logo" class="logo" />
+    <img src="/favicon.png" alt="Stasis Logo" class="logo" />
     <h1>Stasis</h1>
     <p class="tagline">A modern Wayland idle manager that knows when to step back.</p>
     <p class="subtitle">Keep your session in perfect balance—automatically preventing idle when it matters, allowing it when it doesn't.</p>
 
     <div class="cta-buttons">
-      <a href="{base}/quick-start" class="btn btn-primary">Get Started</a>
+      <a href="/quick-start" class="btn btn-primary">Get Started</a>
       <a
         href="https://github.com/saltnpepper97/stasis"
         class="btn btn-secondary"
