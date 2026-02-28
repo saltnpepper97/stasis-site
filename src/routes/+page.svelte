@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { base } from '$app/paths';
 </script>
 
 <div class="hero">
@@ -9,7 +10,7 @@
     <p class="subtitle">Keep your session in perfect balance—automatically preventing idle when it matters, allowing it when it doesn't.</p>
 
     <div class="cta-buttons">
-      <a href="/quick-start" class="btn btn-primary">Get Started</a>
+      <a href="{base}/quick-start" class="btn btn-primary">Get Started</a>
       <a
         href="https://github.com/saltnpepper97/stasis"
         class="btn btn-secondary"

@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import CodeBlock from '$lib/components/CodeBlock.svelte';
+    import PageNav from '$lib/components/PageNav.svelte';
   
   let activeSection = $state('');
   
@@ -160,6 +161,7 @@ systemctl --user enable --now stasis.service`;
       </p>
       <CodeBlock code="exec-once = systemctl --user start stasis" />
     </section>
+    <PageNav/>
   </main>
 </div>
 

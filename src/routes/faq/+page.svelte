@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import CodeBlock from '$lib/components/CodeBlock.svelte';
+    import PageNav from '$lib/components/PageNav.svelte';
 
   type Section = { id: string; title: string };
 
@@ -170,6 +171,7 @@
         </ul>
       </div>
     </section>
+    <PageNav />
   </main>
 </div>
 

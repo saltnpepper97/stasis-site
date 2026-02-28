@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import CodeBlock from '$lib/components/CodeBlock.svelte';
+  import PageNav from '$lib/components/PageNav.svelte';
   
   let activeSection = $state('');
   
@@ -11,7 +12,6 @@
   ];
   
   onMount(() => {
-    // Handle anchor links from other pages
     const hash = window.location.hash.slice(1);
     if (hash) {
       const element = document.getElementById(hash);
@@ -60,7 +60,6 @@
     }
   }
   
-  // Code examples
   const cloneCode = `git clone https://github.com/YOUR_USERNAME/stasis.git
 cd stasis`;
 
@@ -89,17 +88,15 @@ cd stasis`;
     
     <section id="welcome">
       <div class="welcome-card">
- 
-<p class="welcome-text">
-  Contributions make Stasis better for everyone! 💜 <br /> <br />
-  Please read our <a href="https://github.com/saltnpepper97/stasis?tab=readme-ov-file#contributing" target="_blank">GitHub Contributing Guidelines</a> before submitting anything.<br /><br />
+        <p class="welcome-text">
+          Contributions make Stasis better for everyone! 💜 <br /> <br />
+          Please read our <a href="https://github.com/saltnpepper97/stasis?tab=readme-ov-file#contributing" target="_blank">GitHub Contributing Guidelines</a> before submitting anything.<br /><br />
 
-  <strong>Important:</strong><br />
-  - All new features, enhancements, or other contributions (except packaging or compositor work) must first go through an issue or bug report.<br />  
-  - Packaging for distributions and compositor integration can be submitted directly.<br />
-  - Using the correct labels (`bug`, `feature request`, `packaging`, `compositor`, etc.) helps maintainers manage contributions efficiently.<br />
-</p>
-
+          <strong>Important:</strong><br />
+          - All new features, enhancements, or other contributions (except packaging or compositor work) must first go through an issue or bug report.<br />  
+          - Packaging for distributions and compositor integration can be submitted directly.<br />
+          - Using the correct labels (`bug`, `feature request`, `packaging`, `compositor`, etc.) helps maintainers manage contributions efficiently.<br />
+        </p>
       </div>
     </section>
     
@@ -228,6 +225,7 @@ cd stasis`;
         </div>
       </div>
     </section>
+    <PageNav />
   </main>
 </div>
 
@@ -336,7 +334,10 @@ cd stasis`;
   }
 
   .welcome-card {
-    background: linear-gradient(135deg, rgba(168, 85, 247, 0.1) 0%, rgba(201, 42, 42, 0.1) 100%);
+    background: linear-gradient(315deg,
+      color-mix(in srgb, var(--gradient-start) 10%, transparent),
+      color-mix(in srgb, var(--gradient-end) 10%, transparent)
+    );
     border: 2px solid var(--accent);
     border-radius: 12px;
     padding: 32px;
@@ -368,7 +369,7 @@ cd stasis`;
   .contribution-card:hover {
     transform: translateY(-4px);
     border-color: var(--accent);
-    box-shadow: 0 8px 24px rgba(168, 85, 247, 0.15);
+    box-shadow: 0 8px 24px color-mix(in srgb, var(--accent) 15%, transparent);
   }
 
   .card-icon {
@@ -417,7 +418,7 @@ cd stasis`;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg, #a855f7 0%, #c92a2a 100%);
+    background: linear-gradient(315deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
     color: white;
     font-weight: 700;
     font-size: 1.3rem;
@@ -508,7 +509,7 @@ cd stasis`;
     .links-nav button.active {
       border-bottom-color: var(--accent);
       border-left: none;
-      background: rgba(168, 85, 247, 0.1);
+      background: color-mix(in srgb, var(--accent) 10%, transparent);
     }
     
     h1 {

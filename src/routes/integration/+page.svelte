@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import CodeBlock from '$lib/components/CodeBlock.svelte';
+    import PageNav from '$lib/components/PageNav.svelte';
   
   let activeSection = $state('');
   
@@ -116,6 +117,7 @@
       <p>Or display text instead of icons:</p>
       <CodeBlock code={waybarTextCode} language="json" />
     </section>
+    <PageNav />
   </main>
 </div>
 

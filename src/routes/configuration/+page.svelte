@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import CodeBlock from '$lib/components/CodeBlock.svelte';
+    import PageNav from '$lib/components/PageNav.svelte';
 
   type Section = { id: string; title: string };
 
@@ -741,6 +742,7 @@ end
         <CodeBlock code={profileSwitchCode} language="bash" />
       </div>
     </section>
+    <PageNav />
   </main>
 </div>
 
