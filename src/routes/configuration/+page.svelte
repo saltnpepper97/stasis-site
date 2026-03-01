@@ -56,15 +56,15 @@
 
   // --- Code examples (RUNE) ---
 
-const preSuspendDaemonizeCode = `# Recommended pattern when using pre_suspend_command:
-# - start the locker right before suspend
-# - daemonize suspend so the locker can appear first
+const preSuspendDaemonizeCode = `# pre_suspend_command is BLOCKING — Stasis waits for it to finish before suspending.
+# Use your locker's fork flag if it has one, or wrap with daemonize:
 
-pre_suspend_command "hyprlock"
+pre_suspend_command "swaylock -f"         # swaylock: built-in fork flag
+#pre_suspend_command "daemonize hyprlock" # hyprlock: no fork flag, use daemonize
 
 suspend:
   timeout 1800
-  command "daemonize systemctl suspend"
+  command "systemctl suspend"
 end
 
 # If you already lock as a plan step, prefer this instead:
@@ -138,8 +138,10 @@ end`;
 enable_loginctl true`;
 
 const preSuspendCode = `# Run before suspending (e.g. ensure screen is locked first)
-# Tip: if you rely on this for locking, daemonize suspend so the lock can appear.
-pre_suspend_command "hyprlock"
+# pre_suspend_command is BLOCKING — use your locker's fork flag if it has one,
+# or wrap it with the daemonize utility.
+pre_suspend_command "swaylock -f"       # swaylock has a built-in fork flag
+#pre_suspend_command "daemonize hyprlock"  # hyprlock doesn't, use daemonize
 
 # Disable:
 pre_suspend_command None`;
@@ -460,7 +462,7 @@ end
 # PROFILES
 #
 # mode "overlay": merges on top of the active base (default/ac/battery)
-# mode "fresh":   starts from nothing — define every global and step
+# mode "fresh":   starts from nothing — define every global and action block you want
 # --------------------------------------------------------------------
 
 # gaming: overlay — only replace inhibit_apps
@@ -602,16 +604,7 @@ end
       </p>
       <CodeBlock code={preSuspendCode} language="rune" />
       <div class="warning">
-        <strong>Important: use daemonize for pre-suspend locks</strong>
-        <p>
-          <code>pre_suspend_command</code> is intended for lockers that must start <em>right before</em> suspend.
-          To actually give the locker time to appear, the suspend command should be launched in the background
-          (for example via <code>daemonize</code>), otherwise the system may suspend immediately.
-        </p>
-        <p>
-          If your plan already includes a <code>lock_screen:</code> step (which Stasis runs and waits on), you
-          usually do <strong>not</strong> need <code>pre_suspend_command</code>.
-        </p>
+        <strong>Important:</strong> <code>pre_suspend_command</code> is blocking — Stasis waits for it to exit before suspending, so if you pass a locker directly it will wait until you unlock before ever suspending. Use your locker's fork flag if it has one (e.g. <code>swaylock -f</code>), or wrap it with the <code>daemonize</code> utility. If your plan already has a <code>lock_screen:</code> step, you generally don't need <code>pre_suspend_command</code> at all.
       </div>
       <CodeBlock code={preSuspendDaemonizeCode} language="rune" />
     </section>
