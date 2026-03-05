@@ -50,6 +50,7 @@
   "format": "{icon}",
   "format-icons": {
     "idle_active": "",
+    "idle_waiting": "",
     "idle_inhibited": "",
     "manually_inhibited": "",
     "not_running": "󰒲"
