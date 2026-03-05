@@ -7,7 +7,7 @@
   import Footer from '$lib/components/Footer.svelte';
   import { afterNavigate } from '$app/navigation';
   import { page } from '$app/state';
-    import { base } from '$app/paths';
+  import { asset } from '$app/paths';
   
   let { children } = $props();
   
@@ -44,7 +44,7 @@
 </script>
 
 <svelte:head>
-  <link rel="icon" href="{base}/favicon.png" />
+  <link rel="icon" href={asset('/favicon.png')} />
 </svelte:head>
 
 <div class="layout">

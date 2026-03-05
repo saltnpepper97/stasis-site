@@ -1,16 +1,16 @@
 <script lang="ts">
-  import { base } from '$app/paths';
+  import { asset, resolve } from '$app/paths';
 </script>
 
 <div class="hero">
   <div class="hero-content">
-    <img src="{base}/favicon.png" alt="Stasis Logo" class="logo" />
+    <img src={asset('/favicon.png')} alt="Stasis Logo" class="logo" />
     <h1>Stasis</h1>
     <p class="tagline">A modern Wayland idle manager that knows when to step back.</p>
     <p class="subtitle">Keep your session in perfect balance—automatically preventing idle when it matters, allowing it when it doesn't.</p>
 
     <div class="cta-buttons">
-      <a href="{base}/quick-start" class="btn btn-primary">Get Started</a>
+      <a href={resolve('/quick-start')} class="btn btn-primary">Get Started</a>
       <a
         href="https://github.com/saltnpepper97/stasis"
         class="btn btn-secondary"
@@ -37,7 +37,7 @@
     <div class="feature-card">
       <div class="feature-icon">🎵</div>
       <h3>Media Detection</h3>
-      <p>Automatically detects media playback and honors Wayland idle inhibitor protocols—no more mouse jiggles during movies.</p>
+      <p>Uses PulseAudio/PipeWire stream state via <code>pactl</code> for reliable playback and call detection, including tricky browser/Discord edge cases.</p>
     </div>
 
     <div class="feature-card">
@@ -54,8 +54,8 @@
 
     <div class="feature-card">
       <div class="feature-icon">🛌</div>
-      <h3>Lid Event Handling</h3>
-      <p>Detects laptop lid open/close events via DBus to intelligently manage idle behavior.</p>
+      <h3>D-Bus Inhibit Aware</h3>
+      <p>Honors session D-Bus and portal inhibit requests so media sessions and desktop integrations correctly prevent idle actions.</p>
     </div>
 
     <div class="feature-card">

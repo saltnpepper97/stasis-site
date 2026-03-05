@@ -1,14 +1,14 @@
 <script lang="ts">
   import { page } from '$app/state';
-  import { base } from '$app/paths';
+  import { resolve } from '$app/paths';
 
   const pages = [
-    { label: 'Home',          href: `${base}/` },
-    { label: 'Quick Start',   href: `${base}/quick-start` },
-    { label: 'Configuration', href: `${base}/configuration` },
-    { label: 'Integration',   href: `${base}/integration` },
-    { label: 'Contributing',  href: `${base}/contributing` },
-    { label: 'FAQ',           href: `${base}/faq` },
+    { label: 'Home',          href: resolve('/') },
+    { label: 'Quick Start',   href: resolve('/quick-start') },
+    { label: 'Configuration', href: resolve('/configuration') },
+    { label: 'Integration',   href: resolve('/integration') },
+    { label: 'Contributing',  href: resolve('/contributing') },
+    { label: 'FAQ',           href: resolve('/faq') },
   ];
 
   const currentIndex = $derived(

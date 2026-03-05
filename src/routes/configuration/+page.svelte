@@ -82,6 +82,7 @@ notify_seconds    5`;
 
   const defaultBlockCode = `default:
   enable_loginctl false
+  enable_dbus_inhibit true
   pre_suspend_command None
   monitor_media true
   ignore_remote_media true
@@ -136,6 +137,9 @@ end`;
 
   const enableLoginctlCode = `# Enable global login1 tracking (lock/unlock state)
 enable_loginctl true`;
+
+  const enableDbusInhibitCode = `# Enable session-bus inhibit tracking (recommended)
+enable_dbus_inhibit true`;
 
 const preSuspendCode = `# Run before suspending (e.g. ensure screen is locked first)
 # pre_suspend_command is BLOCKING — use your locker's fork flag if it has one,
@@ -332,6 +336,7 @@ notify_seconds    5
 
 default:
   enable_loginctl false
+  enable_dbus_inhibit true
   pre_suspend_command None
   monitor_media true
   ignore_remote_media true  # ignore remote players (spotify/kdeconnect/etc.)
@@ -596,6 +601,18 @@ end
         — there is no per-block <code>use_loginctl</code> option.
       </p>
       <CodeBlock code={enableLoginctlCode} language="rune" />
+
+      <h3>Session D-Bus Inhibit Integration</h3>
+      <p>
+        Keep session-bus inhibit handling enabled so desktop/session requests (including portal inhibits)
+        are honored correctly:
+      </p>
+      <CodeBlock code={enableDbusInhibitCode} language="rune" />
+      <div class="info">
+        <strong>Session context:</strong> Start your compositor in a real session context (for example:
+        <code>niri-session</code>, <code>dbus-run-session</code>, or your compositor's recommended launcher)
+        so session D-Bus features are available.
+      </div>
 
       <h3>Pre-Suspend Command</h3>
       <p>

@@ -1,7 +1,7 @@
 <script lang="ts">
   import { fly, fade } from 'svelte/transition';
   import { quintOut } from 'svelte/easing';
-  import { base } from '$app/paths';
+  import { resolve } from '$app/paths';
   
   let { isOpen = $bindable(false) } = $props();
   
@@ -40,12 +40,12 @@
     </div>
     
     <div class="sidebar-content">
-      <a href="{base}/" onclick={handleLinkClick}>Home</a>
-      <a href="{base}/quick-start" onclick={handleLinkClick}>Quick Start</a>
-      <a href="{base}/configuration" onclick={handleLinkClick}>Configuration</a>
-      <a href="{base}/integration" onclick={handleLinkClick}>Integration</a>
-      <a href="{base}/contributing" onclick={handleLinkClick}>Contributing</a>
-      <a href="{base}/faq" onclick={handleLinkClick}>FAQ</a>
+      <a href={resolve('/')} onclick={handleLinkClick}>Home</a>
+      <a href={resolve('/quick-start')} onclick={handleLinkClick}>Quick Start</a>
+      <a href={resolve('/configuration')} onclick={handleLinkClick}>Configuration</a>
+      <a href={resolve('/integration')} onclick={handleLinkClick}>Integration</a>
+      <a href={resolve('/contributing')} onclick={handleLinkClick}>Contributing</a>
+      <a href={resolve('/faq')} onclick={handleLinkClick}>FAQ</a>
     </div>
   </nav>
 {/if}

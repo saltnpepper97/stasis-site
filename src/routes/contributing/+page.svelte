@@ -113,7 +113,7 @@ cd stasis`;
             <li>Your distro and compositor</li>
             <li>Steps to reproduce the problem</li>
             <li>Expected vs actual behavior</li>
-            <li>Relevant logs from <code>~/.cache/stasis/stasis.log</code></li>
+            <li>Relevant logs from <code>~/.local/state/stasis/stasis.log</code></li>
           </ul>
           <a href="https://github.com/saltnpepper97/stasis/issues/new" target="_blank" rel="noopener noreferrer" class="card-link">Report an Issue →</a>
         </div>

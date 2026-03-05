@@ -48,7 +48,7 @@
   </div>
 
   <div class="footer-bottom">
-    <p>© {currentYear} Stasis. Released under the MIT License.</p>
+    <p>© {currentYear} Stasis. Released under the GNU GPLv3 License.</p>
     <p class="made-with">Made with 💜 for the Wayland community</p>
   </div>
 </footer>

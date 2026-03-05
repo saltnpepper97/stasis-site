@@ -86,9 +86,10 @@
       <p>If Stasis isn't detecting your applications for idle inhibition:</p>
       <ul>
         <li>Ensure your compositor is supported (see Supported Compositors)</li>
+        <li>Start your compositor in a real session context (<code>niri-session</code>, <code>dbus-run-session</code>, or compositor-recommended launcher)</li>
         <li>Check that the app names in <code>inhibit_apps</code> match the actual application names</li>
         <li>
-          Use <code>stasis -v</code> or check <code>~/.cache/stasis/stasis.log</code> for detailed logs on detected apps
+          Use <code>stasis -v</code> or check <code>~/.local/state/stasis/stasis.log</code> for detailed logs on detected apps
         </li>
       </ul>
     </section>
@@ -166,7 +167,7 @@
         <ul>
           <li>Your distribution and compositor</li>
           <li>Stasis version (<code>stasis --version</code>)</li>
-          <li>Relevant log output from <code>~/.cache/stasis/stasis.log</code></li>
+          <li>Relevant log output from <code>~/.local/state/stasis/stasis.log</code></li>
           <li>Your configuration file (sanitize any sensitive info)</li>
         </ul>
       </div>
