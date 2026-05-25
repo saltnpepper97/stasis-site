@@ -21,10 +21,10 @@
     <div class="footer-section">
       <h4>Documentation</h4>
       <ul>
-        <li><a href="/quick-start">Quick Start</a></li>
-        <li><a href="/configuration">Configuration</a></li>
-        <li><a href="/integration">Integration</a></li>
-        <li><a href="/faq">FAQ</a></li>
+        <li><a href="/stasis-site/quick-start">Quick Start</a></li>
+        <li><a href="/stasis-site/configuration">Configuration</a></li>
+        <li><a href="/stasis-site/integration">Integration</a></li>
+        <li><a href="/stasis-site/faq">FAQ</a></li>
       </ul>
     </div>
 
@@ -33,7 +33,7 @@
       <ul>
         <li><a href="https://github.com/saltnpepper97/stasis" target="_blank" rel="noopener noreferrer">GitHub</a></li>
         <li><a href="https://github.com/saltnpepper97/stasis/issues" target="_blank" rel="noopener noreferrer">Report Issues</a></li>
-        <li><a href="/contributing">Contributing</a></li>
+        <li><a href="/stasis-site/contributing">Contributing</a></li>
       </ul>
     </div>
 
