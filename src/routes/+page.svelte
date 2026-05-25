@@ -67,21 +67,19 @@
 </section>
 
 <style>
-  /* Brand helpers (match the new logo: cosmic violet + burnt core) */
+  /* Brand helpers matching the glass hourglass icon. */
   :global([data-theme="dark"]) {
-    --brand-violet: #4B2E83;
-    --brand-deep: #1C1233;
-    --brand-ember: #C7782B;   /* burnt orange core */
-    --brand-ember-deep: #A45A1F;
-    --brand-lavender: #C8B6FF;
+    --brand-cyan: #34E8E2;
+    --brand-blue: #16A7F2;
+    --brand-violet: #4B35F5;
+    --brand-glass: #F4FBFF;
   }
 
   :global([data-theme="light"]) {
-    --brand-violet: #4B2E83;
-    --brand-deep: #1C1233;
-    --brand-ember: #C7782B;
-    --brand-ember-deep: #A45A1F;
-    --brand-lavender: #C8B6FF;
+    --brand-cyan: #079FB4;
+    --brand-blue: #159EE8;
+    --brand-violet: #3728D9;
+    --brand-glass: #FFFFFF;
   }
 
   .hero {
@@ -89,18 +87,19 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    position: relative;
+    overflow: hidden;
 
-    /* softer, calmer background wash using new brand colors */
     background:
-      radial-gradient(900px 600px at 50% 35%,
-        rgba(199, 120, 43, 0.10),
+      radial-gradient(760px 520px at 50% 36%,
+        color-mix(in srgb, var(--brand-cyan) 14%, transparent),
         transparent 60%),
-      radial-gradient(900px 700px at 30% 70%,
-        rgba(75, 46, 131, 0.10),
+      radial-gradient(880px 620px at 74% 28%,
+        color-mix(in srgb, var(--brand-violet) 10%, transparent),
         transparent 65%),
       linear-gradient(180deg,
-        rgba(75, 46, 131, 0.05),
-        rgba(199, 120, 43, 0.03));
+        color-mix(in srgb, var(--brand-blue) 5%, transparent),
+        transparent 62%);
 
     padding: 40px 20px;
     width: 100%;
@@ -108,9 +107,35 @@
     transform: translateX(-50%);
   }
 
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 12% 8% auto;
+    height: 46%;
+    background:
+      linear-gradient(110deg,
+        transparent 10%,
+        color-mix(in srgb, var(--brand-cyan) 10%, transparent) 42%,
+        color-mix(in srgb, var(--brand-violet) 9%, transparent) 70%,
+        transparent 92%);
+    filter: blur(34px);
+    transform: skewY(-7deg);
+    pointer-events: none;
+  }
+
   .hero-content {
     max-width: 800px;
     text-align: center;
+    position: relative;
+    z-index: 1;
+    padding: 48px;
+    border: 1px solid var(--border-color);
+    border-radius: 32px;
+    background:
+      linear-gradient(180deg, var(--surface-highlight), transparent),
+      var(--surface-glass);
+    box-shadow: var(--shadow-glow);
+    backdrop-filter: blur(18px) saturate(125%);
   }
 
   .logo {
@@ -119,10 +144,9 @@
     margin: 0 auto 32px;
     display: block;
 
-    /* calm suspended glow, not neon */
     filter:
-      drop-shadow(0 10px 26px rgba(75, 46, 131, 0.22))
-      drop-shadow(0 6px 18px rgba(199, 120, 43, 0.16));
+      drop-shadow(0 14px 30px color-mix(in srgb, var(--brand-cyan) 24%, transparent))
+      drop-shadow(0 8px 24px color-mix(in srgb, var(--brand-violet) 18%, transparent));
     animation: float 3s ease-in-out infinite;
   }
 
@@ -137,8 +161,7 @@
     font-weight: 700;
     margin: 0 0 24px 0;
 
-    /* logo-matching title gradient */
-    background: linear-gradient(135deg, var(--brand-violet) 0%, var(--brand-ember) 100%);
+    background: linear-gradient(135deg, var(--brand-cyan) 0%, var(--brand-blue) 44%, var(--brand-violet) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -177,7 +200,7 @@
     align-items: center;
     gap: 8px;
     padding: 14px 32px;
-    border-radius: 10px;
+    border-radius: 999px;
     font-family: 'Space Grotesk', sans-serif;
     font-weight: 600;
     font-size: 1.05rem;
@@ -188,29 +211,29 @@
   }
 
   .btn-primary {
-    background: linear-gradient(135deg, var(--brand-violet) 0%, var(--brand-ember) 100%);
+    background: linear-gradient(135deg, var(--brand-cyan) 0%, var(--brand-blue) 45%, var(--brand-violet) 100%);
     color: #fff;
     box-shadow:
-      0 10px 26px rgba(75, 46, 131, 0.22),
-      0 6px 18px rgba(199, 120, 43, 0.16);
+      0 10px 26px color-mix(in srgb, var(--brand-blue) 22%, transparent),
+      0 6px 18px color-mix(in srgb, var(--brand-violet) 16%, transparent);
   }
 
   .btn-primary:hover {
     transform: translateY(-2px);
     box-shadow:
-      0 14px 34px rgba(75, 46, 131, 0.26),
-      0 10px 24px rgba(199, 120, 43, 0.20);
+      0 14px 34px color-mix(in srgb, var(--brand-blue) 28%, transparent),
+      0 10px 24px color-mix(in srgb, var(--brand-violet) 20%, transparent);
   }
 
   /* Secondary button stays calm and “system UI” */
   .btn-secondary {
-    background: var(--bg-secondary);
+    background: var(--surface-glass);
     color: var(--text-primary);
     border: 2px solid var(--border-color);
   }
 
   .btn-secondary:hover {
-    border-color: var(--brand-lavender);
+    border-color: var(--brand-cyan);
     transform: translateY(-2px);
   }
 
@@ -227,19 +250,23 @@
   }
 
   .feature-card {
-    background: var(--bg-secondary);
+    background:
+      linear-gradient(180deg, var(--surface-highlight), transparent),
+      var(--surface-glass);
     border: 1px solid var(--border-color);
-    border-radius: 12px;
+    border-radius: var(--radius-card);
     padding: 32px;
+    box-shadow: 0 1px 0 color-mix(in srgb, var(--accent-soft) 16%, transparent) inset;
+    backdrop-filter: blur(12px) saturate(120%);
     transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
   }
 
   .feature-card:hover {
     transform: translateY(-4px);
-    border-color: rgba(200, 182, 255, 0.35);
+    border-color: color-mix(in srgb, var(--brand-cyan) 40%, transparent);
     box-shadow:
-      0 10px 30px rgba(75, 46, 131, 0.10),
-      0 8px 20px rgba(199, 120, 43, 0.06);
+      0 10px 30px color-mix(in srgb, var(--brand-blue) 12%, transparent),
+      0 8px 20px color-mix(in srgb, var(--brand-violet) 8%, transparent);
   }
 
   .feature-icon {
@@ -267,6 +294,11 @@
     .hero {
       min-height: 100vh;
       padding: 100px 20px 40px;
+    }
+
+    .hero-content {
+      padding: 32px 22px;
+      border-radius: 24px;
     }
 
     .logo {

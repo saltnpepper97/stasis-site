@@ -57,7 +57,8 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(2, 8, 18, 0.58);
+    backdrop-filter: blur(3px);
     z-index: 998;
     border: none;
     padding: 0;
@@ -70,8 +71,12 @@
     left: 0;
     width: 280px;
     height: 100%;
-    background: var(--bg-primary);
-    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.3);
+    background:
+      linear-gradient(180deg, var(--surface-highlight), transparent),
+      var(--surface-glass-strong);
+    border-right: 1px solid var(--border-color);
+    box-shadow: 18px 0 44px rgba(0, 0, 0, 0.24);
+    backdrop-filter: blur(18px) saturate(130%);
     z-index: 999;
     display: flex;
     flex-direction: column;
@@ -103,12 +108,12 @@
     justify-content: center;
     color: var(--text-secondary);
     transition: all 0.2s;
-    border-radius: 4px;
+    border-radius: 999px;
   }
   
   .close-btn:hover {
     color: var(--text-primary);
-    background: var(--bg-secondary);
+    background: color-mix(in srgb, var(--accent) 10%, transparent);
   }
   
   .sidebar-content {
@@ -121,19 +126,19 @@
     padding: 1rem;
     text-decoration: none;
     color: var(--text-primary);
-    border-radius: 6px;
+    border-radius: 12px;
     transition: all 0.2s;
     font-size: 1rem;
     font-weight: 500;
   }
   
   .sidebar-content a:hover {
-    background: var(--bg-secondary);
+    background: color-mix(in srgb, var(--accent) 10%, transparent);
     color: var(--accent);
   }
   
   .sidebar-content a:active {
-    background: var(--bg-secondary);
+    background: color-mix(in srgb, var(--accent) 14%, transparent);
     opacity: 0.8;
   }
 </style>

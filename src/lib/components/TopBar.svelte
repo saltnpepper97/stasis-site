@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { resolve } from '$app/paths';
+  import { asset, resolve } from '$app/paths';
   
   type Theme = 'auto' | 'light' | 'dark';
   let theme: Theme = 'auto';
@@ -62,6 +62,9 @@
 
 <div class="topbar">
   <div class="brand">
+    <a class="brand-icon-link" href={resolve('/')} aria-label="Stasis home">
+      <img src={asset('/favicon.png')} alt="" class="brand-icon" />
+    </a>
     <span><a class="title" href={resolve('/')}>Stasis</a></span>
   </div>
   <nav>
@@ -120,13 +123,15 @@
   display: grid;
   grid-template-columns: auto 1fr auto;
   align-items: center;
-  background: linear-gradient(
-    135deg,
-    var(--gradient-end),
-    var(--gradient-start)
-  );
+  background:
+    linear-gradient(135deg,
+      color-mix(in srgb, var(--gradient-start) 32%, transparent),
+      color-mix(in srgb, var(--gradient-end) 28%, transparent)),
+    color-mix(in srgb, var(--bg-primary) 78%, transparent);
   padding: 12px 24px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  border-bottom: 1px solid color-mix(in srgb, var(--accent) 18%, transparent);
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.18);
+  backdrop-filter: blur(18px) saturate(135%);
   gap: 32px;
 }
 
@@ -138,11 +143,34 @@
 .topbar .brand {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   font-weight: 700;
   font-size: 1.1rem;
   color: #fff;
   white-space: nowrap;
+}
+
+.brand-icon {
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
+  flex: 0 0 auto;
+  filter:
+    drop-shadow(0 2px 5px rgba(52, 232, 226, 0.25))
+    drop-shadow(0 1px 4px rgba(75, 53, 245, 0.18));
+}
+
+.brand-icon-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
+  border-radius: 8px;
+}
+
+.brand-icon-link:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.85);
+  outline-offset: 3px;
 }
 
 nav {
@@ -169,9 +197,9 @@ nav a {
   text-decoration: none;
   align-items: center;
   justify-content: center;
-  color: rgba(255, 255, 255, 0.9);
+  color: rgba(255, 255, 255, 0.88);
   padding: 8px 16px;
-  border-radius: 6px;
+  border-radius: 999px;
   font-weight: 500;
   font-size: 0.95rem;
   transition: all 0.2s ease;
@@ -179,19 +207,19 @@ nav a {
 }
 
 nav a:hover {
-  background-color: rgba(255, 255, 255, 0.15);
+  background-color: rgba(244, 251, 255, 0.13);
   color: #fff;
 }
 
 nav a::after {
   content: '';
   position: absolute;
-  bottom: 4px;
+  bottom: 2px;
   left: 50%;
   transform: translateX(-50%) scaleX(0);
-  width: 80%;
-  height: 2px;
-  background: #fff;
+  width: min(56%, 36px);
+  height: 1px;
+  background: rgba(131, 242, 255, 0.9);
   transition: transform 0.2s ease;
 }
 
@@ -209,10 +237,10 @@ nav a:hover::after {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: rgba(200, 182, 255, 0.14); /* lavender tint */
+  background-color: rgba(244, 251, 255, 0.12);
   padding: 8px;
   border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(244, 251, 255, 0.18);
   cursor: pointer;
   transition: all 0.2s ease;
   backdrop-filter: blur(10px);
@@ -228,7 +256,7 @@ nav a:hover::after {
 }
 
 .theme-toggle:hover {
-  background-color: rgba(200, 182, 255, 0.22);
+  background-color: rgba(244, 251, 255, 0.20);
   transform: scale(1.1);
 }
 
@@ -237,17 +265,17 @@ nav a:hover::after {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: rgba(200, 182, 255, 0.14); /* same pill/glass */
+  background-color: rgba(244, 251, 255, 0.12);
   padding: 8px;
   border-radius: 50%;
   transition: all 0.2s ease;
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(244, 251, 255, 0.18);
   color: #000; /* ALWAYS black */
 }
 
 .github:hover {
-  background-color: rgba(200, 182, 255, 0.22);
+  background-color: rgba(244, 251, 255, 0.20);
   transform: scale(1.1);
 }
 

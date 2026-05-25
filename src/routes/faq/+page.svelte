@@ -295,16 +295,16 @@
     border-left: 4px solid;
     padding: 20px;
     margin: 24px 0;
-    border-radius: 4px;
+    border-radius: 14px;
   }
 
   .warning {
-    background: rgba(255, 193, 7, 0.1);
-    border-left-color: #ffc107;
+    background: color-mix(in srgb, var(--accent-strong) 9%, var(--surface-glass));
+    border-left-color: var(--accent-strong);
   }
 
   .info {
-    background: var(--bg-secondary);
+    background: color-mix(in srgb, var(--accent) 8%, var(--surface-glass));
     border-left-color: var(--accent);
   }
 
@@ -316,9 +316,9 @@
   }
 
   code {
-    background: var(--bg-secondary);
+    background: var(--surface-glass);
     padding: 2px 6px;
-    border-radius: 3px;
+    border-radius: 6px;
     font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
     font-size: 0.9em;
     color: var(--text-primary);
@@ -358,14 +358,14 @@
       border-bottom: 2px solid transparent;
       padding: 8px 12px;
       font-size: 0.85rem;
-      background: var(--bg-secondary);
-      border-radius: 6px;
+      background: var(--surface-glass);
+      border-radius: 999px;
       text-align: center;
     }
 
     .links-nav button.active {
       border-bottom-color: var(--accent);
-      background: rgba(168, 85, 247, 0.1);
+      background: color-mix(in srgb, var(--accent) 12%, transparent);
     }
 
     h1 {

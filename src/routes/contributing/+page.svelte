@@ -334,12 +334,11 @@ cd stasis`;
   }
 
   .welcome-card {
-    background: linear-gradient(315deg,
-      color-mix(in srgb, var(--gradient-start) 10%, transparent),
-      color-mix(in srgb, var(--gradient-end) 10%, transparent)
-    );
-    border: 2px solid var(--accent);
-    border-radius: 12px;
+    background:
+      linear-gradient(180deg, var(--surface-highlight), transparent),
+      color-mix(in srgb, var(--accent) 8%, var(--surface-glass));
+    border: 1px solid color-mix(in srgb, var(--accent) 34%, var(--border-color));
+    border-radius: var(--radius-card);
     padding: 32px;
     margin: 24px 0;
   }
@@ -359,9 +358,11 @@ cd stasis`;
   }
 
   .contribution-card {
-    background: var(--bg-secondary);
+    background:
+      linear-gradient(180deg, var(--surface-highlight), transparent),
+      var(--surface-glass);
     border: 1px solid var(--border-color);
-    border-radius: 12px;
+    border-radius: var(--radius-card);
     padding: 28px;
     transition: all 0.3s ease;
   }
@@ -369,7 +370,7 @@ cd stasis`;
   .contribution-card:hover {
     transform: translateY(-4px);
     border-color: var(--accent);
-    box-shadow: 0 8px 24px color-mix(in srgb, var(--accent) 15%, transparent);
+    box-shadow: var(--shadow-glow);
   }
 
   .card-icon {
@@ -434,11 +435,11 @@ cd stasis`;
   }
 
   .info {
-    background: var(--bg-secondary);
+    background: color-mix(in srgb, var(--accent) 8%, var(--surface-glass));
     border-left: 4px solid var(--accent);
     padding: 24px;
     margin: 32px 0;
-    border-radius: 4px;
+    border-radius: 14px;
   }
 
   .info strong {
@@ -464,9 +465,9 @@ cd stasis`;
   }
 
   code {
-    background: var(--bg-secondary);
+    background: var(--surface-glass);
     padding: 2px 6px;
-    border-radius: 3px;
+    border-radius: 6px;
     font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
     font-size: 0.9em;
     color: var(--text-primary);
@@ -502,8 +503,8 @@ cd stasis`;
       border-bottom: 2px solid transparent;
       padding: 10px 16px;
       font-size: 0.85rem;
-      background: var(--bg-secondary);
-      border-radius: 6px;
+      background: var(--surface-glass);
+      border-radius: 999px;
     }
     
     .links-nav button.active {

@@ -44,11 +44,11 @@
     right: 12px;
     display: flex;
     gap: 6px;
-    background: var(--bg-primary);
+    background: var(--surface-glass-strong);
     border: 1px solid var(--border-color);
     color: var(--text-secondary);
     padding: 6px 12px;
-    border-radius: 6px;
+    border-radius: 999px;
     font-size: 0.85rem;
     cursor: pointer;
     transition: all 0.2s ease;
@@ -56,7 +56,7 @@
   }
   
   .copy-button:hover {
-    background: var(--bg-secondary);
+    background: color-mix(in srgb, var(--accent) 12%, var(--surface-glass-strong));
     color: var(--text-primary);
     border-color: var(--accent);
   }
@@ -66,12 +66,15 @@
   }
   
   pre {
-    background: var(--bg-secondary);
+    background:
+      linear-gradient(180deg, var(--surface-highlight), transparent),
+      var(--surface-glass-strong);
     padding: 16px;
     padding-right: 100px; /* Make room for copy button */
-    border-radius: 6px;
+    border-radius: 14px;
     overflow-x: auto;
     border: 1px solid var(--border-color);
+    box-shadow: 0 1px 0 color-mix(in srgb, var(--accent-soft) 12%, transparent) inset;
     margin: 0;
     min-height: 48px; /* Ensure consistent minimum height */
     display: flex;

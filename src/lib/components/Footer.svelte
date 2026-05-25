@@ -54,18 +54,16 @@
 </footer>
 
 <style>
-  /* Footer background: calm suspended wash (cosmic violet + burnt core) */
+  /* Footer background: glassy cyan rim + violet sand wash. */
   .footer {
     background:
-      radial-gradient(900px 420px at 20% 20%,
-        rgba(75, 46, 131, 0.10),
+      radial-gradient(760px 360px at 18% 0%,
+        color-mix(in srgb, var(--accent) 8%, transparent),
         transparent 60%),
-      radial-gradient(900px 420px at 85% 30%,
-        rgba(199, 120, 43, 0.08),
+      radial-gradient(760px 360px at 88% 18%,
+        color-mix(in srgb, var(--accent-strong) 7%, transparent),
         transparent 60%),
-      linear-gradient(180deg,
-        rgba(75, 46, 131, 0.04),
-        rgba(199, 120, 43, 0.02));
+      var(--surface-glass);
     border-top: 1px solid var(--border-color);
     padding: 60px 20px 20px;
     margin-top: auto;
@@ -86,8 +84,7 @@
     font-weight: 700;
     margin: 0 0 12px 0;
 
-    /* Match logo gradient */
-    background: linear-gradient(135deg, #4B2E83 0%, #C7782B 100%);
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-soft) 42%, var(--accent-strong) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -121,7 +118,7 @@
     width: 40px;
     height: 40px;
 
-    background: rgba(200, 182, 255, 0.10);
+    background: color-mix(in srgb, var(--accent) 8%, var(--surface-glass));
     border: 1px solid var(--border-color);
     border-radius: 50%;
 
@@ -131,8 +128,8 @@
   }
 
   .social-links a:hover {
-    background: rgba(200, 182, 255, 0.16);
-    border-color: rgba(200, 182, 255, 0.35);
+    background: color-mix(in srgb, var(--accent) 14%, var(--surface-glass));
+    border-color: color-mix(in srgb, var(--accent) 35%, transparent);
     transform: translateY(-2px);
   }
 

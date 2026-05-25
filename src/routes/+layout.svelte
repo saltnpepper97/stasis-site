@@ -114,22 +114,22 @@
     top: 1rem;
     left: 1rem;
     z-index: 997;
-    background: var(--bg-primary);
+    background: var(--surface-glass-strong);
     border: 1px solid var(--border-color);
-    border-radius: 8px;
+    border-radius: 14px;
     padding: 0.75rem;
     cursor: pointer;
     display: none;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    box-shadow: var(--shadow-glow);
     transition: all 0.2s;
     color: var(--text-primary);
   }
   
   .hamburger:hover {
-    background: var(--bg-secondary);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    background: color-mix(in srgb, var(--accent) 10%, var(--surface-glass-strong));
+    box-shadow: var(--shadow-glow);
   }
   
   .hamburger:active {

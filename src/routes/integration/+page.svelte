@@ -255,14 +255,14 @@ p {
     border-bottom: 2px solid transparent;
     padding: 10px 12px;
     font-size: 0.8rem;
-    background: var(--bg-secondary);
-    border-radius: 6px;
+    background: var(--surface-glass);
+    border-radius: 999px;
     text-align: center;
   }
 
   .links-nav button.active {
     border-bottom-color: var(--accent);
-    background: rgba(168, 85, 247, 0.1);
+    background: color-mix(in srgb, var(--accent) 12%, transparent);
   }
 }
 
