@@ -5,6 +5,7 @@
   import TopBar from '$lib/components/TopBar.svelte';
   import SideBar from '$lib/components/SideBar.svelte';
   import Footer from '$lib/components/Footer.svelte';
+  import ThemeToggle from '$lib/components/ThemeToggle.svelte';
   import { afterNavigate } from '$app/navigation';
   import { page } from '$app/state';
   import { asset } from '$app/paths';
@@ -56,6 +57,10 @@
       <line x1="3" y1="18" x2="21" y2="18"></line>
     </svg>
   </button>
+
+  <div class="mobile-theme-toggle">
+    <ThemeToggle />
+  </div>
   
   <!-- Mobile Sidebar -->
   <SideBar bind:isOpen={isSidebarOpen} />
@@ -135,10 +140,22 @@
   .hamburger:active {
     transform: scale(0.95);
   }
+
+  .mobile-theme-toggle {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    z-index: 997;
+    display: none;
+  }
   
   /* Tablet and Mobile styles */
   @media (max-width: 1024px) {
     .hamburger {
+      display: flex;
+    }
+
+    .mobile-theme-toggle {
       display: flex;
     }
     
@@ -157,6 +174,10 @@
   /* Desktop styles */
   @media (min-width: 1025px) {
     .hamburger {
+      display: none;
+    }
+
+    .mobile-theme-toggle {
       display: none;
     }
     

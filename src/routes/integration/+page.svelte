@@ -7,7 +7,8 @@
   
   const sections = [
     { id: 'quickshell', title: 'Quickshell' },
-    { id: 'waybar', title: 'Waybar' }
+    { id: 'waybar', title: 'Waybar' },
+    { id: 'tray', title: 'System Tray' }
   ];
   
   onMount(() => {
@@ -71,6 +72,21 @@
   "restart-interval": 2,
   "return-type": "json"
 }`;
+
+  const trayServiceCode = `[Unit]
+Description=Stasis System Tray Frontend
+PartOf=graphical-session.target
+After=graphical-session.target stasis.service
+ConditionPathExists=%t
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/stasis tray
+Restart=on-failure
+RestartSec=2
+
+[Install]
+WantedBy=graphical-session.target`;
 </script>
 
 <div class="page-container">
@@ -117,6 +133,40 @@
       <h4>Text-based Display</h4>
       <p>Or display text instead of icons:</p>
       <CodeBlock code={waybarTextCode} language="json" />
+    </section>
+
+    <section id="tray">
+      <h2>System Tray</h2>
+
+      <p>
+        <code>stasis tray</code> runs the optional StatusNotifier tray frontend. It is separate from
+        the headless daemon and does not replace <code>stasis info --json</code>, so Waybar and other
+        status bars can keep polling the JSON output directly.
+      </p>
+
+      <p>
+        The tray tooltip shows the current Stasis state. Its menu provides actions to toggle
+        manual inhibition, pause, resume, reload the config, and quit only the tray process.
+      </p>
+
+      <div class="info-card">
+        <strong>Tray host required</strong>
+        <p>
+          Start a StatusNotifier tray host first, such as Waybar's tray module, KDE Plasma,
+          or another panel with tray support. The daemon remains headless and does not launch
+          the tray automatically.
+        </p>
+      </div>
+
+      <h3>Run Manually</h3>
+      <CodeBlock code="stasis tray" language="bash" />
+
+      <h3>Systemd User Service</h3>
+      <p>
+        Run the daemon and tray as separate user services. Packages may already install this
+        optional service file as <code>stasis-tray.service</code>.
+      </p>
+      <CodeBlock code={trayServiceCode} language="ini" />
     </section>
     <PageNav />
   </main>
@@ -229,6 +279,27 @@ p {
   margin: 16px 0;
 }
 
+.info-card {
+  margin: 20px 0;
+  padding: 18px 20px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-card);
+  background:
+    linear-gradient(180deg, var(--surface-highlight), transparent),
+    var(--surface-glass);
+  box-shadow: var(--shadow-glow);
+}
+
+.info-card strong {
+  display: block;
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+
+.info-card p {
+  margin: 0;
+}
+
 /* === MOBILE === */
 @media (max-width: 768px) {
   .page-container {
@@ -246,7 +317,7 @@ p {
 
   .links-nav ul {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 8px;
   }
 
