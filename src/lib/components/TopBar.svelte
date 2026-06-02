@@ -78,6 +78,16 @@
   color: #000;
 }
 
+:global([data-theme="light"]) nav a:hover {
+  background-color: rgba(0, 0, 0, 0.10);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.12);
+}
+
+:global([data-theme="light"]) nav a::after {
+  height: 2px;
+  background: var(--accent-soft);
+}
+
 .topbar .brand {
   display: flex;
   align-items: center;
