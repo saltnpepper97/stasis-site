@@ -66,9 +66,16 @@
   gap: 32px;
 }
 
-/* ===== Topbar text should always be white (both themes) ===== */
+/* ===== Topbar text defaults to white for dark/gradient contrast ===== */
 .topbar .title {
   color: #fff;
+}
+
+:global([data-theme="light"]) .topbar .title,
+:global([data-theme="light"]) .topbar .brand,
+:global([data-theme="light"]) nav a,
+:global([data-theme="light"]) nav a:hover {
+  color: #000;
 }
 
 .topbar .brand {
@@ -122,7 +129,7 @@ li {
   align-items: center;
 }
 
-/* Links always white-ish on the gradient */
+/* Links default to white-ish on the gradient */
 nav a {
   display: flex;
   text-decoration: none;
