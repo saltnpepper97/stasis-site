@@ -26,6 +26,27 @@
   </div>
 </div>
 
+<section class="release-note">
+  <div class="release-card">
+    <p class="eyebrow">Current release: Stasis 1.3.0</p>
+    <h2>Latest updates</h2>
+    <div class="release-grid">
+      <div>
+        <strong>Notification icons</strong>
+        <p>Generated notifications now use the packaged <code>stasis</code> icon by default, with global and per-step <code>notification_icon</code> overrides.</p>
+      </div>
+      <div>
+        <strong>Tray and status integrations</strong>
+        <p>The optional StatusNotifier tray remains separate from the daemon, while <code>stasis info --json</code> keeps serving Waybar-friendly state.</p>
+      </div>
+      <div>
+        <strong>Better session awareness</strong>
+        <p>D-Bus inhibit tracking, Halley app detection, and loginctl-based lock tracking are documented for modern Wayland sessions.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section class="features">
   <div class="feature-grid">
     <div class="feature-card">
@@ -43,7 +64,7 @@
     <div class="feature-card">
       <div class="feature-icon">⚙️</div>
       <h3>Flexible Actions</h3>
-      <p>Configure custom actions with regex patterns, application-specific rules, and named action blocks for complete control.</p>
+      <p>Configure startup steps, custom actions, resume hooks, per-step notifications, notification icons, and named profiles.</p>
     </div>
 
     <div class="feature-card">
@@ -56,6 +77,12 @@
       <div class="feature-icon">🛌</div>
       <h3>D-Bus Inhibit Aware</h3>
       <p>Honors session D-Bus and portal inhibit requests so media sessions and desktop integrations correctly prevent idle actions.</p>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon">🧩</div>
+      <h3>Compositor Friendly</h3>
+      <p>Supports Niri, Hyprland, Halley, and fallback app detection for compositors with limited window enumeration.</p>
     </div>
 
     <div class="feature-card">
@@ -243,6 +270,62 @@
     margin: 0 auto;
   }
 
+  .release-note {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 72px 20px 0;
+  }
+
+  .release-card {
+    border: 1px solid var(--border-color);
+    border-radius: 28px;
+    padding: 32px;
+    background:
+      radial-gradient(760px 260px at 10% 0%, color-mix(in srgb, var(--brand-cyan) 12%, transparent), transparent 62%),
+      linear-gradient(180deg, var(--surface-highlight), transparent),
+      var(--surface-glass);
+    box-shadow: var(--shadow-glow);
+  }
+
+  .eyebrow {
+    margin: 0 0 10px;
+    color: var(--accent);
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .release-card h2 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 2rem;
+    margin: 0 0 24px;
+    color: var(--text-primary);
+  }
+
+  .release-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+
+  .release-grid strong {
+    color: var(--text-primary);
+  }
+
+  .release-grid p {
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin: 10px 0 0;
+  }
+
+  .release-grid code {
+    background: var(--surface-glass-strong);
+    border-radius: 6px;
+    padding: 2px 6px;
+    color: var(--text-primary);
+  }
+
   .feature-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -337,6 +420,24 @@
 
     .features {
       padding: 40px 16px;
+    }
+
+    .release-note {
+      padding: 48px 16px 0;
+    }
+
+    .release-card {
+      padding: 24px;
+      border-radius: 22px;
+    }
+
+    .release-card h2 {
+      font-size: 1.6rem;
+    }
+
+    .release-grid {
+      grid-template-columns: 1fr;
+      gap: 18px;
     }
 
     .feature-grid {

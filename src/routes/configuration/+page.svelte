@@ -84,6 +84,7 @@ notify_seconds    5`;
   enable_loginctl false
   enable_dbus_inhibit true
   pre_suspend_command None
+  #prepare_sleep_command "hyprlock"
   monitor_media true
   ignore_remote_media true
 
@@ -100,6 +101,7 @@ notify_seconds    5`;
 
   # Global gate: per-step notifications only fire if this is true
   notify_before_action true
+  notification_icon "stasis"
 
   inhibit_apps [
     r"steam_app_.*"
@@ -115,6 +117,7 @@ notify_seconds    5`;
     command "hyprlock"
     resume_command "notify-send 'Welcome back $env.USER!'"
     notification "Locking soon"
+    #notification_icon "dialog-warning"
     notify_seconds_before notify_seconds
   end
 
@@ -149,6 +152,13 @@ pre_suspend_command "swaylock -f"       # swaylock has a built-in fork flag
 
 # Disable:
 pre_suspend_command None`;
+
+  const prepareSleepCode = `# Run immediately when logind emits PrepareForSleep(true).
+# This covers external sleep events such as lid-triggered sleep or systemctl suspend.
+prepare_sleep_command "hyprlock"
+
+# Disable or clear inherited value:
+prepare_sleep_command ""`;
 
   const profileIntroCode = `# Any top-level named block besides \`default:\` is a profile.
 # Profiles override settings/steps from the active base and can
@@ -241,6 +251,24 @@ ignore_remote_media true`;
 
   const notifyBeforeActionCode = `notify_before_action true
 notify_seconds_before 5`;
+
+  const notificationIconCode = `# Global default for Stasis-generated notifications.
+# Packaged installs provide the "stasis" icon.
+notification_icon "stasis"
+
+# Use another icon name or an absolute file path:
+notification_icon "dialog-warning"
+
+# Disable the default icon entirely:
+notification_icon ""`;
+
+  const stepNotificationIconCode = `lock_screen:
+  timeout 300
+  command "hyprlock"
+  notification "Locking session in 10s"
+  notification_icon "dialog-warning"
+  notify_seconds_before 10
+end`;
 
   const lidActionsCode = `# Lives under default: so it applies to both ac: and battery: plans.
 # A profile can override or clear these.
@@ -338,6 +366,7 @@ default:
   enable_loginctl false
   enable_dbus_inhibit true
   pre_suspend_command None
+  #prepare_sleep_command "hyprlock"
   monitor_media true
   ignore_remote_media true  # ignore remote players (spotify/kdeconnect/etc.)
 
@@ -355,6 +384,11 @@ default:
 
   # Enables per-step notifications (only if the block sets \`notification\`)
   notify_before_action true
+
+  # Icon name/path for Stasis-generated notifications. Defaults to "stasis".
+  # Set to "" to disable the default icon, or override per step with
+  # notification_icon.
+  notification_icon "stasis"
 
   inhibit_apps [
     "mpv"
@@ -384,6 +418,7 @@ default:
     command "hyprlock"
     resume_command "notify-send 'Welcome back $env.USER!'"
     notification "Locking session in 10s"
+    notification_icon "dialog-warning"
     notify_seconds_before 10
   end
 
@@ -486,6 +521,7 @@ work:
   mode "overlay"
 
   enable_loginctl true
+  enable_dbus_inhibit true
   debounce_seconds 10
   monitor_media true
   ignore_remote_media true
@@ -513,6 +549,7 @@ presentation:
   mode "fresh"
 
   pre_suspend_command None
+  enable_dbus_inhibit true
   monitor_media false
   ignore_remote_media true
   debounce_seconds 0
@@ -602,6 +639,20 @@ end
       </p>
       <CodeBlock code={enableLoginctlCode} language="rune" />
 
+      <div class="info">
+        <strong>Why use this?</strong>
+        <p>
+          Without it, Stasis tracks the locker's process lifetime. If your locker daemonizes (runs in the background), Stasis might see it exit immediately and think the screen is already unlocked.
+          Using <code>enable_loginctl</code> switches tracking to D-Bus signals from <code>logind</code>, which is much more robust for background lockers.
+        </p>
+
+        <strong>Wrapper Script Pattern:</strong>
+        <p>To use this, create a wrapper script (e.g., <code>~/.local/bin/stasis-lock.sh</code>):</p>
+        <CodeBlock code={`#!/usr/bin/env bash\nloginctl lock-session\nswaylock -f`} language="bash" />
+        <p>Then set your command to use the wrapper:</p>
+        <CodeBlock code={`lock_screen:\n  timeout 300\n  command "~/.local/bin/stasis-lock.sh"`} language="rune" />
+      </div>
+
       <h3>Session D-Bus Inhibit Integration</h3>
       <p>
         Keep session-bus inhibit handling enabled so desktop/session requests (including portal inhibits)
@@ -624,6 +675,14 @@ end
         <strong>Important:</strong> <code>pre_suspend_command</code> is blocking — Stasis waits for it to exit before suspending, so if you pass a locker directly it will wait until you unlock before ever suspending. Use your locker's fork flag if it has one (e.g. <code>swaylock -f</code>), or wrap it with the <code>daemonize</code> utility. If your plan already has a <code>lock_screen:</code> step, you generally don't need <code>pre_suspend_command</code> at all.
       </div>
       <CodeBlock code={preSuspendDaemonizeCode} language="rune" />
+
+      <h3>Prepare Sleep Command</h3>
+      <p>
+        Use <code>prepare_sleep_command</code> when you need a command to run as soon as logind announces
+        an external sleep transition. This is different from <code>pre_suspend_command</code>, which only runs
+        before Stasis's own <code>suspend:</code> step.
+      </p>
+      <CodeBlock code={prepareSleepCode} language="rune" />
     </section>
 
     <section id="media">
@@ -664,7 +723,7 @@ end
       <h2>Notifications</h2>
 
       <h3>On Unpause</h3>
-      <p>Notify when resuming from an IPC pause (e.g., <code>stasis pause 1h</code>):</p>
+      <p>Notify when resuming from an IPC pause (e.g., <code>stasis pause for 1h</code>):</p>
       <CodeBlock code={notifyOnUnpauseCode} language="rune" />
 
       <h3>Pre-Action</h3>
@@ -676,6 +735,15 @@ end
         <li>Optionally override timing per-block with <code>notify_seconds_before</code></li>
       </ul>
       <CodeBlock code={notifyBeforeActionCode} language="rune" />
+
+      <h3>Notification Icons</h3>
+      <p>
+        Stasis 1.3.0 passes an icon to <code>notify-send</code> for generated notifications.
+        Packaged installs provide the default <code>stasis</code> icon, and you can override or clear it globally.
+      </p>
+      <CodeBlock code={notificationIconCode} language="rune" />
+      <p>Individual action blocks can override the global icon:</p>
+      <CodeBlock code={stepNotificationIconCode} language="rune" />
     </section>
 
     <section id="laptop">
@@ -703,6 +771,7 @@ end
         <li><code>command</code> — command to run (required; use <code>None</code> to disable)</li>
         <li><code>resume_command</code> / <code>resume-command</code> — optional, run when activity resumes</li>
         <li><code>notification</code> — optional message shown before the action runs</li>
+        <li><code>notification_icon</code> — optional icon name or path for this action's notification</li>
         <li><code>notify_seconds_before</code> — optional per-block timing override</li>
       </ul>
 
@@ -747,8 +816,8 @@ end
     <section id="example">
       <h2>Full Example</h2>
       <p>
-        Complete example covering desktop plan, laptop AC/battery plans, and all three profile modes
-        (<code>overlay</code> and <code>fresh</code>):
+        Complete example covering desktop plan, laptop AC/battery plans, notification icons, sleep hooks,
+        and both profile modes (<code>overlay</code> and <code>fresh</code>):
       </p>
       <CodeBlock code={fullExampleCode} language="rune" />
     </section>
@@ -905,10 +974,6 @@ end
     display: block;
     margin-bottom: 12px;
     font-size: 1.05rem;
-  }
-
-  .warning p {
-    margin: 8px 0;
   }
 
   .info {

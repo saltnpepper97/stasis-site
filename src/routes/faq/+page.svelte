@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import CodeBlock from '$lib/components/CodeBlock.svelte';
-    import PageNav from '$lib/components/PageNav.svelte';
+  import PageNav from '$lib/components/PageNav.svelte';
 
   type Section = { id: string; title: string };
 
@@ -9,6 +9,8 @@
 
   const sections: Section[] = [
     { id: 'app-detection', title: 'App Detection' },
+    { id: 'dbus-media', title: 'D-Bus & Media' },
+    { id: 'locker-loop', title: 'Locker Issues' },
     { id: 'regex-patterns', title: 'Regex Patterns' },
     { id: 'service-issues', title: 'Service Issues' },
     { id: 'config-reload', title: 'Config Reload' },
@@ -57,7 +59,10 @@
   // Code examples
   const serviceLogsCode = `journalctl --user -u stasis.service`;
   const reloadCode = `systemctl --user restart stasis.service`;
-  const videoGroupCode = `sudo gpasswd -a <user> video`;
+  const dumpCode = `stasis dump 200`;
+  const lockerWrapperCode = `#!/usr/bin/env bash
+loginctl lock-session
+swaylock -f`;
 </script>
 
 <div class="page-container">
@@ -86,12 +91,49 @@
       <p>If Stasis isn't detecting your applications for idle inhibition:</p>
       <ul>
         <li>Ensure your compositor is supported (see Supported Compositors)</li>
+        <li>Halley, Niri, and Hyprland have native app tracking; labwc and River use process-based fallback detection</li>
         <li>Start your compositor in a real session context (<code>niri-session</code>, <code>dbus-run-session</code>, or compositor-recommended launcher)</li>
         <li>Check that the app names in <code>inhibit_apps</code> match the actual application names</li>
+        <li>For Halley, patterns match window <code>app_id</code> values from <code>halleyctl node list --json</code></li>
         <li>
           Use <code>stasis -v</code> or check <code>~/.local/state/stasis/stasis.log</code> for detailed logs on detected apps
         </li>
       </ul>
+    </section>
+
+    <section id="dbus-media">
+      <h2>D-Bus Inhibits or Media Not Working</h2>
+      <p>
+        Browser and portal inhibit requests are handled by <code>enable_dbus_inhibit</code>, not by
+        <code>monitor_media</code>. Audio playback and call detection use <code>pactl</code> through
+        PulseAudio or PipeWire Pulse.
+      </p>
+      <ul>
+        <li>Keep <code>enable_dbus_inhibit true</code> for browser, Steam, and portal inhibit traffic</li>
+        <li>Start the compositor inside a real D-Bus session so session-bus monitoring is available</li>
+        <li>Install <code>pulseaudio</code> or <code>pipewire-pulse</code> so <code>pactl</code> is available</li>
+        <li>Use <code>media_blacklist</code> only for media sources you want to ignore</li>
+      </ul>
+      <div class="warning">
+        <strong>Web Discord limitation</strong>
+        Browser/portal behavior can still drop inhibits during some web Discord calls when no microphone
+        source-output is attached. This is a browser/portal signal limitation rather than a normal config error.
+      </div>
+    </section>
+
+    <section id="locker-loop">
+      <h2>Lock Step Fires Repeatedly</h2>
+      <p>
+        If Stasis locks, immediately resumes, and then starts the plan again, your locker may be daemonizing.
+        Stasis normally tracks lock state by waiting for the locker process to exit.
+      </p>
+      <ul>
+        <li>Remove fork/daemonize options such as <code>swaylock -f</code> when possible</li>
+        <li>If your locker must fork, set <code>enable_loginctl true</code> and call <code>loginctl lock-session</code> before launching it</li>
+        <li>Confirm the loop with recent logs:</li>
+      </ul>
+      <CodeBlock code={dumpCode} language="bash" />
+      <CodeBlock code={lockerWrapperCode} language="bash" />
     </section>
 
     <section id="regex-patterns">
@@ -100,7 +142,7 @@
       <ul>
         <li>Ensure you're using raw string syntax: <code>r"pattern"</code></li>
         <li>Test patterns with verbose logging to see what apps are detected</li>
-        <li>Remember that River uses process-based detection (fallback) which may have different app names</li>
+        <li>Remember that process-based fallback detection may report different names than native compositor IPC</li>
       </ul>
       <div class="info">
         <strong>💡 Tip:</strong>
@@ -118,6 +160,11 @@
       </ul>
       <CodeBlock code={serviceLogsCode} language="bash" />
       <p>Common issues include incorrect binary paths or missing dependencies.</p>
+      <p>
+        If Stasis starts but cannot see Wayland, D-Bus, or compositor-specific environment variables, ensure your
+        user service receives <code>WAYLAND_DISPLAY</code>, <code>XDG_RUNTIME_DIR</code>, <code>DBUS_SESSION_BUS_ADDRESS</code>,
+        and compositor variables such as <code>NIRI_SOCKET</code> when required.
+      </p>
     </section>
 
     <section id="config-reload">
@@ -137,7 +184,7 @@
       <ul>
         <li>Validate your RUNE syntax (see RUNE notes in documentation)</li>
         <li>
-          Verify built-in action block names (fixed as of v0.1.2):
+          Verify built-in action block names:
           <ul>
             <li><code>startup</code></li>
             <li><code>lock_screen</code> / <code>lock-screen</code></li>

@@ -1,12 +1,13 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import CodeBlock from '$lib/components/CodeBlock.svelte';
-    import PageNav from '$lib/components/PageNav.svelte';
+  import PageNav from '$lib/components/PageNav.svelte';
   
   let activeSection = $state('');
   
   const sections = [
     { id: 'quickshell', title: 'Quickshell' },
+    { id: 'status-json', title: 'Status JSON' },
     { id: 'waybar', title: 'Waybar' },
     { id: 'tray', title: 'System Tray' }
   ];
@@ -54,6 +55,7 @@
     "idle_waiting": "",
     "idle_inhibited": "",
     "manually_inhibited": "",
+    "locked": "",
     "not_running": "󰒲"
   },
   "tooltip": true,
@@ -61,6 +63,14 @@
   "interval": 2,
   "restart-interval": 2,
   "return-type": "json"
+}`;
+
+  const statusJsonCode = `{
+  "text": "active",
+  "alt": "idle_active",
+  "class": "idle_active",
+  "tooltip": "Profile: default\\nPlan Source: Desktop\\nState: active",
+  "profile": "default"
 }`;
 
   const waybarTextCode = `"custom/stasis": {
@@ -117,6 +127,20 @@ WantedBy=graphical-session.target`;
         Quickshell integration is pending upstream support.
       </p>
     </section>
+
+    <section id="status-json">
+      <h2>Status JSON</h2>
+      <p>
+        <code>stasis info --json</code> is the stable status-bar contract. The <code>text</code> field uses short labels:
+        <code>waiting</code>, <code>active</code>, <code>inhibited</code>, <code>locked</code>, and <code>manual</code>.
+      </p>
+      <p>
+        The <code>alt</code> and <code>class</code> fields are intended for icon mapping and CSS styling. Tooltips include
+        the active profile, plan source, state, manual pause status, app/media inhibitor counts, D-Bus inhibit state,
+        and the next pending action when available.
+      </p>
+      <CodeBlock code={statusJsonCode} language="json" />
+    </section>
     
     <section id="waybar">
       <h2>Waybar</h2>
@@ -167,6 +191,11 @@ WantedBy=graphical-session.target`;
         optional service file as <code>stasis-tray.service</code>.
       </p>
       <CodeBlock code={trayServiceCode} language="ini" />
+
+      <p>
+        NixOS and Home Manager users can enable the tray through the module option
+        <code>services.stasis.tray.enable</code>.
+      </p>
     </section>
     <PageNav />
   </main>
@@ -317,7 +346,7 @@ p {
 
   .links-nav ul {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     gap: 8px;
   }
 

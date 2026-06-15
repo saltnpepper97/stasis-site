@@ -1,11 +1,14 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import CodeBlock from '$lib/components/CodeBlock.svelte';
-    import PageNav from '$lib/components/PageNav.svelte';
+  import PageNav from '$lib/components/PageNav.svelte';
   
   let activeSection = $state('');
   
   const sections = [
+    { id: 'install', title: 'Installation' },
+    { id: 'session', title: 'Session Setup' },
+    { id: 'lockers', title: 'Screen Lockers' },
     { id: 'manual', title: 'Running Manually' },
     { id: 'systemd', title: 'Systemd Service' },
   ];
@@ -64,15 +67,45 @@
 Description=Stasis Wayland Idle Manager
 PartOf=graphical-session.target
 After=graphical-session.target
-ConditionEnvironment=WAYLAND_DISPLAY
+ConditionPathExists=%t
 
 [Service]
 Type=simple
 ExecStart=/usr/bin/stasis
+ExecReload=/usr/bin/stasis reload
 Restart=on-failure
+RestartSec=2
 
 [Install]
 WantedBy=graphical-session.target`; 
+
+  const archInstallCode = `yay -S stasis
+# or track git builds
+yay -S stasis-git`;
+
+  const nixInstallCode = `nix build 'github:saltnpepper97/stasis#stasis'`;
+
+  const sourceInstallCode = `git clone https://github.com/saltnpepper97/stasis
+cd stasis
+cargo build --release --locked
+sudo install -Dm755 target/release/stasis /usr/local/bin/stasis
+sudo install -Dm644 assets/stasis.png /usr/local/share/icons/hicolor/256x256/apps/stasis.png`;
+
+  const lockerWrapperCode = `#!/usr/bin/env bash
+# Tell logind we are locking; Stasis listens for this when enable_loginctl is true.
+loginctl lock-session
+
+# Run your locker in the background if it must daemonize or fork.
+swaylock -f`;
+
+  const lockerConfigCode = `default:
+  enable_loginctl true
+
+  lock_screen:
+    timeout 300
+    command "~/.local/bin/stasis-lock.sh"
+  end
+end`;
   
   const enableServiceCode = `# Reload systemd to recognize the new service
 systemctl --user daemon-reload
@@ -100,6 +133,57 @@ systemctl --user enable --now stasis.service`;
   
   <main class="content">
     <h1>Quick Start</h1>
+
+    <section id="install">
+      <h2>Installation</h2>
+      <p>Install Stasis from your package manager when available, or build it from source.</p>
+
+      <h3>Arch Linux</h3>
+      <CodeBlock code={archInstallCode} language="bash" />
+
+      <h3>Nix / NixOS</h3>
+      <CodeBlock code={nixInstallCode} language="bash" />
+
+      <h3>From Source</h3>
+      <p>
+        Runtime dependencies include Wayland, D-Bus, and <code>pulseaudio</code> or
+        <code>pipewire-pulse</code> for media detection through <code>pactl</code>.
+      </p>
+      <CodeBlock code={sourceInstallCode} language="bash" />
+    </section>
+
+    <section id="session">
+      <h2>Session Setup</h2>
+      <p>
+        Start your compositor inside a real D-Bus session if you use
+        <code>enable_dbus_inhibit</code>, loginctl lock tracking, lid events, or suspend/resume integration.
+      </p>
+
+      <div class="note">
+        Use your compositor or distribution's recommended launcher, such as <code>niri-session</code>,
+        <code>dbus-run-session</code>, or another session wrapper that provides
+        <code>DBUS_SESSION_BUS_ADDRESS</code> to user services.
+      </div>
+    </section>
+
+    <section id="lockers">
+      <h2>Screen Lockers</h2>
+      <p>
+        Stasis normally tracks a lock step by waiting for the configured locker process to exit.
+        If your locker daemonizes or forks immediately, Stasis can interpret that as an immediate unlock.
+      </p>
+
+      <div class="warning">
+        <strong>Do not daemonize unless you also enable loginctl tracking.</strong>
+        Remove options like <code>swaylock -f</code> when possible. If your setup requires a backgrounding locker,
+        use <code>enable_loginctl true</code> and a wrapper script.
+      </div>
+
+      <h3>Wrapper Script Pattern</h3>
+      <CodeBlock code={lockerWrapperCode} language="bash" />
+      <p>Save this as <code>~/.local/bin/stasis-lock.sh</code>, make it executable, then reference it from your config:</p>
+      <CodeBlock code={lockerConfigCode} language="rune" />
+    </section>
  
     <section id="manual">
       <h2>Running Manually</h2>
@@ -124,8 +208,8 @@ systemctl --user enable --now stasis.service`;
 
       <h3>Provided Service File</h3>
       <p>
-        Stasis already provides a service file if you installed it via the AUR on Arch Linux
-        To start the service file with your desired compositor first enable it using:
+        Stasis provides a user service file when installed through packages such as the AUR.
+        Enable it once, then start it from your compositor's autostart if your session target does not start it automatically:
       </p>
 
       <CodeBlock code="systemctl --user enable stasis.service" />
@@ -146,7 +230,7 @@ systemctl --user enable --now stasis.service`;
       <CodeBlock code={systemdServiceCode} language="ini" />
       
       <div class="note">
-        <strong>Path Note:</strong> The service file above assumes Stasis is installed in <code>$HOME/.local/bin/stasis</code>. 
+        <strong>Path Note:</strong> The service file above assumes Stasis is installed in <code>/usr/bin/stasis</code>.
         If you installed Stasis to a different location (e.g., <code>~/.cargo/bin/stasis</code>), 
         update the <code>ExecStart=</code> line accordingly.
       </div>
@@ -279,10 +363,6 @@ systemctl --user enable --now stasis.service`;
     padding: 16px;
     margin: 24px 0;
     border-radius: 14px;
-  }
-  
-  .warning ul {
-    margin: 8px 0 0 0;
   }
   
   .note {
