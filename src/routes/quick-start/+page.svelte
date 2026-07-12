@@ -92,14 +92,14 @@ sudo install -Dm755 target/release/stasis /usr/local/bin/stasis
 sudo install -Dm644 assets/stasis.png /usr/local/share/icons/hicolor/256x256/apps/stasis.png`;
 
   const lockerWrapperCode = `#!/usr/bin/env bash
-# Tell logind we are locking; Stasis listens for this when enable_loginctl is true.
+# Tell logind we are locking; Stasis listens for this when enable_loginctl_integration is true.
 loginctl lock-session
 
 # Run your locker in the background if it must daemonize or fork.
 swaylock -f`;
 
   const lockerConfigCode = `default:
-  enable_loginctl true
+  enable_loginctl_integration true
 
   lock_screen:
     timeout 300
@@ -114,7 +114,7 @@ systemctl --user daemon-reload
 systemctl --user enable --now stasis.service`;
 </script>
 
-<div class="page-container">
+<div class="page-container docs-page">
   <nav class="links-nav">
     <div class="nav-title">On this page</div>
     <ul>
@@ -176,7 +176,7 @@ systemctl --user enable --now stasis.service`;
       <div class="warning">
         <strong>Do not daemonize unless you also enable loginctl tracking.</strong>
         Remove options like <code>swaylock -f</code> when possible. If your setup requires a backgrounding locker,
-        use <code>enable_loginctl true</code> and a wrapper script.
+        use <code>enable_loginctl_integration true</code> and a wrapper script.
       </div>
 
       <h3>Wrapper Script Pattern</h3>

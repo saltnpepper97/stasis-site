@@ -65,7 +65,7 @@ loginctl lock-session
 swaylock -f`;
 </script>
 
-<div class="page-container">
+<div class="page-container docs-page">
   <nav class="links-nav" aria-label="On this page">
     <div class="nav-title">On this page</div>
     <ul>
@@ -129,7 +129,7 @@ swaylock -f`;
       </p>
       <ul>
         <li>Remove fork/daemonize options such as <code>swaylock -f</code> when possible</li>
-        <li>If your locker must fork, set <code>enable_loginctl true</code> and call <code>loginctl lock-session</code> before launching it</li>
+        <li>If your locker must fork, set <code>enable_loginctl_integration true</code> and call <code>loginctl lock-session</code> before launching it</li>
         <li>Confirm the loop with recent logs:</li>
       </ul>
       <CodeBlock code={dumpCode} language="bash" />

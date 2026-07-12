@@ -2,497 +2,100 @@
   import { asset, resolve } from '$app/paths';
 </script>
 
-<div class="hero">
-  <div class="hero-content">
-    <img src={asset('/favicon.png')} alt="Stasis Logo" class="logo" />
-    <h1>Stasis</h1>
-    <p class="tagline">A modern Wayland idle manager that knows when to step back.</p>
-    <p class="subtitle">Keep your session in perfect balance—automatically preventing idle when it matters, allowing it when it doesn't.</p>
-
-    <div class="cta-buttons">
-      <a href={resolve('/quick-start')} class="btn btn-primary">Get Started</a>
-      <a
-        href="https://github.com/saltnpepper97/stasis"
-        class="btn btn-secondary"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-        </svg>
-        View on GitHub
-      </a>
-    </div>
-  </div>
-</div>
-
-<section class="release-note">
-  <div class="release-card">
-    <p class="eyebrow">Current release: Stasis 1.3.0</p>
-    <h2>Latest updates</h2>
-    <div class="release-grid">
-      <div>
-        <strong>Notification icons</strong>
-        <p>Generated notifications now use the packaged <code>stasis</code> icon by default, with global and per-step <code>notification_icon</code> overrides.</p>
-      </div>
-      <div>
-        <strong>Tray and status integrations</strong>
-        <p>The optional StatusNotifier tray remains separate from the daemon, while <code>stasis info --json</code> keeps serving Waybar-friendly state.</p>
-      </div>
-      <div>
-        <strong>Better session awareness</strong>
-        <p>D-Bus inhibit tracking, Halley app detection, and loginctl-based lock tracking are documented for modern Wayland sessions.</p>
+<main>
+  <section class="hero">
+    <div class="hero-copy">
+      <p class="kicker">Wayland idle management</p>
+      <h1>Time to step back.</h1>
+      <p class="lede">
+        Stasis is a context-aware idle manager for Wayland. It runs an ordered plan when you are away,
+        then gets out of the way when your session is active.
+      </p>
+      <div class="actions">
+        <a class="primary" href={resolve('/quick-start')}>Get started <span>→</span></a>
+        <a class="secondary" href={resolve('/configuration')}>Read the configuration</a>
       </div>
     </div>
-  </div>
-</section>
 
-<section class="features">
-  <div class="feature-grid">
-    <div class="feature-card">
-      <div class="feature-icon">🧠</div>
-      <h3>Context-Aware</h3>
-      <p>Watching a video? Reading a document? Stasis understands your activity and prevents unwanted screen locks automatically.</p>
+    <div class="hero-mark" aria-hidden="true">
+      <div class="mark-frame">
+        <img src={asset('/favicon.png')} alt="" />
+      </div>
+      <p>Idle, without the surprises.</p>
     </div>
+  </section>
 
-    <div class="feature-card">
-      <div class="feature-icon">🎵</div>
-      <h3>Media Detection</h3>
-      <p>Uses PulseAudio/PipeWire stream state via <code>pactl</code> for reliable playback and call detection, including tricky browser/Discord edge cases.</p>
+  <section class="release-brief" aria-labelledby="release-heading">
+    <div class="brief-heading">
+      <p class="kicker">Current release</p>
+      <h2 id="release-heading">1.4.0</h2>
+      <p>A tighter relationship with your shell, hardware, and session state.</p>
     </div>
+    <div class="brief-list">
+      <article>
+        <span>01</span>
+        <h3>Live events</h3>
+        <p><code>stasis watch</code> streams state, pause, and profile changes to custom shell integrations.</p>
+      </article>
+      <article>
+        <span>02</span>
+        <h3>Lower-power idle</h3>
+        <p>Optional GPU power saving follows DPMS and restores the original settings when you return.</p>
+      </article>
+      <article>
+        <span>03</span>
+        <h3>Lock-aware sleep</h3>
+        <p>LockedHint tracking and <code>prepare_sleep_command</code> improve awareness around locking and suspend.</p>
+      </article>
+    </div>
+  </section>
 
-    <div class="feature-card">
-      <div class="feature-icon">⚙️</div>
-      <h3>Flexible Actions</h3>
-      <p>Configure startup steps, custom actions, resume hooks, per-step notifications, notification icons, and named profiles.</p>
+  <section class="capabilities" aria-labelledby="capabilities-heading">
+    <div>
+      <p class="kicker">What it handles</p>
+      <h2 id="capabilities-heading">A small system with clear boundaries.</h2>
     </div>
-
-    <div class="feature-card">
-      <div class="feature-icon">⚡</div>
-      <h3>Live Reload</h3>
-      <p>Update your configuration on the fly without restarting. Changes take effect immediately.</p>
-    </div>
-
-    <div class="feature-card">
-      <div class="feature-icon">🛌</div>
-      <h3>D-Bus Inhibit Aware</h3>
-      <p>Honors session D-Bus and portal inhibit requests so media sessions and desktop integrations correctly prevent idle actions.</p>
-    </div>
-
-    <div class="feature-card">
-      <div class="feature-icon">🧩</div>
-      <h3>Compositor Friendly</h3>
-      <p>Supports Niri, Hyprland, Halley, and fallback app detection for compositors with limited window enumeration.</p>
-    </div>
-
-    <div class="feature-card">
-      <div class="feature-icon">📝</div>
-      <h3>Clean Config</h3>
-      <p>Uses the intuitive RUNE configuration language for easy setup and maintenance.</p>
-    </div>
-  </div>
-</section>
+    <ol>
+      <li><strong>01 / Ordered actions</strong><span>Build a plan that dims, locks, powers down displays, and suspends on your timing.</span></li>
+      <li><strong>02 / Real activity</strong><span>Media, applications, portals, and compositor activity can keep the plan from firing at the wrong time.</span></li>
+      <li><strong>03 / Profiles</strong><span>Switch between focused, gaming, presentation, or laptop setups without rewriting your base config.</span></li>
+      <li><strong>04 / Observable state</strong><span>Use the tray, status JSON, or the event stream to make Stasis visible in the rest of your desktop.</span></li>
+    </ol>
+  </section>
+</main>
 
 <style>
-  /* Brand helpers matching the glass hourglass icon. */
-  :global([data-theme="dark"]) {
-    --brand-cyan: #34E8E2;
-    --brand-blue: #16A7F2;
-    --brand-violet: #4B35F5;
-    --brand-glass: #F4FBFF;
-  }
-
-  :global([data-theme="light"]) {
-    --brand-cyan: #079FB4;
-    --brand-blue: #159EE8;
-    --brand-violet: #3728D9;
-    --brand-glass: #FFFFFF;
-  }
-
-  .hero {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    overflow: hidden;
-
-    background:
-      radial-gradient(760px 520px at 50% 36%,
-        color-mix(in srgb, var(--brand-cyan) 14%, transparent),
-        transparent 60%),
-      radial-gradient(880px 620px at 74% 28%,
-        color-mix(in srgb, var(--brand-violet) 10%, transparent),
-        transparent 65%),
-      linear-gradient(180deg,
-        color-mix(in srgb, var(--brand-blue) 5%, transparent),
-        transparent 62%);
-
-    padding: 40px 20px;
-    width: 100%;
-    margin-left: 50%;
-    transform: translateX(-50%);
-  }
-
-  .hero::before {
-    content: '';
-    position: absolute;
-    inset: 12% 8% auto;
-    height: 46%;
-    background:
-      linear-gradient(110deg,
-        transparent 10%,
-        color-mix(in srgb, var(--brand-cyan) 10%, transparent) 42%,
-        color-mix(in srgb, var(--brand-violet) 9%, transparent) 70%,
-        transparent 92%);
-    filter: blur(34px);
-    transform: skewY(-7deg);
-    pointer-events: none;
-  }
-
-  .hero-content {
-    max-width: 800px;
-    text-align: center;
-    position: relative;
-    z-index: 1;
-    padding: 48px;
-    border: 1px solid var(--border-color);
-    border-radius: 32px;
-    background:
-      linear-gradient(180deg, var(--surface-highlight), transparent),
-      var(--surface-glass);
-    box-shadow: var(--shadow-glow);
-    backdrop-filter: blur(18px) saturate(125%);
-  }
-
-  .logo {
-    width: 180px;
-    height: 180px;
-    margin: 0 auto 32px;
-    display: block;
-
-    filter:
-      drop-shadow(0 14px 30px color-mix(in srgb, var(--brand-cyan) 24%, transparent))
-      drop-shadow(0 8px 24px color-mix(in srgb, var(--brand-violet) 18%, transparent));
-    animation: float 3s ease-in-out infinite;
-  }
-
-  @keyframes float {
-    0%, 100% { transform: translateY(0px); }
-    50% { transform: translateY(-10px); }
-  }
-
-  h1 {
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 4.5rem;
-    font-weight: 700;
-    margin: 0 0 24px 0;
-
-    background: linear-gradient(135deg, var(--brand-cyan) 0%, var(--brand-blue) 44%, var(--brand-violet) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-
-    letter-spacing: -2px;
-  }
-
-  .tagline {
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 1.5rem;
-    font-weight: 500;
-    color: var(--text-primary);
-    margin: 0 0 16px 0;
-    line-height: 1.4;
-  }
-
-  .subtitle {
-    font-size: 1.1rem;
-    color: var(--text-secondary);
-    margin: 0 0 40px 0;
-    line-height: 1.6;
-    max-width: 600px;
-    margin-left: auto;
-    margin-right: auto;
-  }
-
-  .cta-buttons {
-    display: flex;
-    gap: 16px;
-    justify-content: center;
-    margin-bottom: 32px;
-  }
-
-  .btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 14px 32px;
-    border-radius: 999px;
-    font-family: 'Space Grotesk', sans-serif;
-    font-weight: 600;
-    font-size: 1.05rem;
-    text-decoration: none;
-    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease, background 0.2s ease;
-    border: none;
-    cursor: pointer;
-  }
-
-  .btn-primary {
-    background: linear-gradient(135deg, var(--brand-cyan) 0%, var(--brand-blue) 45%, var(--brand-violet) 100%);
-    color: #fff;
-    box-shadow:
-      0 10px 26px color-mix(in srgb, var(--brand-blue) 22%, transparent),
-      0 6px 18px color-mix(in srgb, var(--brand-violet) 16%, transparent);
-  }
-
-  .btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow:
-      0 14px 34px color-mix(in srgb, var(--brand-blue) 28%, transparent),
-      0 10px 24px color-mix(in srgb, var(--brand-violet) 20%, transparent);
-  }
-
-  /* Secondary button stays calm and “system UI” */
-  .btn-secondary {
-    background: var(--surface-glass);
-    color: var(--text-primary);
-    border: 2px solid var(--border-color);
-  }
-
-  .btn-secondary:hover {
-    border-color: var(--brand-cyan);
-    transform: translateY(-2px);
-  }
-
-  .features {
-    padding: 80px 20px;
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-
-  .release-note {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 72px 20px 0;
-  }
-
-  .release-card {
-    border: 1px solid var(--border-color);
-    border-radius: 28px;
-    padding: 32px;
-    background:
-      radial-gradient(760px 260px at 10% 0%, color-mix(in srgb, var(--brand-cyan) 12%, transparent), transparent 62%),
-      linear-gradient(180deg, var(--surface-highlight), transparent),
-      var(--surface-glass);
-    box-shadow: var(--shadow-glow);
-  }
-
-  .eyebrow {
-    margin: 0 0 10px;
-    color: var(--accent);
-    font-size: 0.82rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-
-  .release-card h2 {
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 2rem;
-    margin: 0 0 24px;
-    color: var(--text-primary);
-  }
-
-  .release-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 24px;
-  }
-
-  .release-grid strong {
-    color: var(--text-primary);
-  }
-
-  .release-grid p {
-    color: var(--text-secondary);
-    line-height: 1.6;
-    margin: 10px 0 0;
-  }
-
-  .release-grid code {
-    background: var(--surface-glass-strong);
-    border-radius: 6px;
-    padding: 2px 6px;
-    color: var(--text-primary);
-  }
-
-  .feature-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 32px;
-  }
-
-  .feature-card {
-    background:
-      linear-gradient(180deg, var(--surface-highlight), transparent),
-      var(--surface-glass);
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-card);
-    padding: 32px;
-    box-shadow: 0 1px 0 color-mix(in srgb, var(--accent-soft) 16%, transparent) inset;
-    backdrop-filter: blur(12px) saturate(120%);
-    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
-  }
-
-  .feature-card:hover {
-    transform: translateY(-4px);
-    border-color: color-mix(in srgb, var(--brand-cyan) 40%, transparent);
-    box-shadow:
-      0 10px 30px color-mix(in srgb, var(--brand-blue) 12%, transparent),
-      0 8px 20px color-mix(in srgb, var(--brand-violet) 8%, transparent);
-  }
-
-  .feature-icon {
-    font-size: 3rem;
-    margin-bottom: 16px;
-  }
-
-  .feature-card h3 {
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 1.4rem;
-    font-weight: 600;
-    margin: 0 0 12px 0;
-    color: var(--text-primary);
-  }
-
-  .feature-card p {
-    font-size: 0.95rem;
-    line-height: 1.6;
-    color: var(--text-secondary);
-    margin: 0;
-  }
-
-  /* Tablet and Mobile */
-  @media (max-width: 1024px) {
-    .hero {
-      min-height: 100vh;
-      padding: 100px 20px 40px;
-    }
-
-    .hero-content {
-      padding: 32px 22px;
-      border-radius: 24px;
-    }
-
-    .logo {
-      width: 140px;
-      height: 140px;
-      margin-bottom: 24px;
-    }
-
-    h1 {
-      font-size: 2.5rem;
-      letter-spacing: -1px;
-      margin-bottom: 16px;
-    }
-
-    .tagline {
-      font-size: 1.1rem;
-      margin-bottom: 12px;
-    }
-
-    .subtitle {
-      font-size: 0.95rem;
-      margin-bottom: 32px;
-    }
-
-    .cta-buttons {
-      flex-direction: column;
-      align-items: stretch;
-      gap: 12px;
-    }
-
-    .btn {
-      justify-content: center;
-      padding: 12px 24px;
-      font-size: 1rem;
-    }
-
-    .features {
-      padding: 40px 16px;
-    }
-
-    .release-note {
-      padding: 48px 16px 0;
-    }
-
-    .release-card {
-      padding: 24px;
-      border-radius: 22px;
-    }
-
-    .release-card h2 {
-      font-size: 1.6rem;
-    }
-
-    .release-grid {
-      grid-template-columns: 1fr;
-      gap: 18px;
-    }
-
-    .feature-grid {
-      grid-template-columns: 1fr;
-      gap: 20px;
-    }
-
-    .feature-card {
-      padding: 24px;
-    }
-
-    .feature-icon {
-      font-size: 2.5rem;
-    }
-
-    .feature-card h3 {
-      font-size: 1.2rem;
-    }
-
-    .feature-card p {
-      font-size: 0.9rem;
-    }
-  }
-
-  /* Extra small devices */
-  @media (max-width: 480px) {
-    .hero {
-      padding: 90px 16px 32px;
-    }
-
-    .logo {
-      width: 120px;
-      height: 120px;
-      margin-bottom: 20px;
-    }
-
-    h1 {
-      font-size: 2rem;
-    }
-
-    .tagline {
-      font-size: 1rem;
-    }
-
-    .subtitle {
-      font-size: 0.9rem;
-    }
-
-    .btn {
-      font-size: 0.95rem;
-      padding: 10px 20px;
-    }
-
-    .feature-card {
-      padding: 20px;
-    }
-  }
+  main { max-width: var(--content-width); margin: 0 auto; padding: 34px 24px 0; }
+  .hero { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(280px, .75fr); gap: clamp(48px, 10vw, 150px); align-items: center; min-height: min(700px, calc(100vh - 72px)); padding: 80px 0; border-bottom: 1px solid var(--rule); }
+  .kicker { margin: 0 0 14px; color: var(--signal); font-family: var(--font-mono); font-size: .7rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; }
+  h1, h2 { margin: 0; color: var(--ink); font-family: var(--font-display); font-weight: 600; letter-spacing: -.07em; line-height: .9; }
+  h1 { max-width: 700px; font-size: clamp(4.3rem, 10vw, 9.5rem); }
+  .lede { max-width: 590px; margin: 32px 0 0; color: var(--muted); font-size: clamp(1.05rem, 1.5vw, 1.28rem); line-height: 1.65; }
+  .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 36px; }
+  .actions a { display: inline-flex; align-items: center; gap: 22px; padding: 13px 18px; border: 1px solid var(--ink); text-decoration: none; font-size: .9rem; font-weight: 700; }
+  .primary { background: var(--ink); color: var(--surface); }
+  .primary:hover { background: var(--signal); border-color: var(--signal); }
+  .secondary { color: var(--ink); }
+  .secondary:hover { background: var(--signal-soft); border-color: var(--signal); }
+  .hero-mark { display: grid; justify-items: center; gap: 20px; }
+  .mark-frame { display: grid; place-items: center; width: min(100%, 310px); aspect-ratio: 1; border: 1px solid var(--ink); background: var(--surface); box-shadow: 18px 18px 0 var(--signal); }
+  .mark-frame img { width: 68%; height: 68%; object-fit: contain; }
+  .hero-mark p { margin: 0; color: var(--muted); font-family: var(--font-mono); font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; }
+  .release-brief { display: grid; grid-template-columns: 1fr 2fr; gap: clamp(32px, 8vw, 120px); padding: 88px 0; border-bottom: 1px solid var(--rule); }
+  .brief-heading h2 { font-size: clamp(3.5rem, 6vw, 6rem); }
+  .brief-heading > p:last-child { max-width: 300px; color: var(--muted); }
+  .brief-list { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--rule); }
+  .brief-list article { min-height: 240px; padding: 20px 18px 10px; border-right: 1px solid var(--rule); }
+  .brief-list article:first-child { border-left: 1px solid var(--rule); }
+  .brief-list span { color: var(--signal); font-family: var(--font-mono); font-size: .72rem; }
+  .brief-list h3 { margin: 52px 0 10px; font-size: 1rem; }
+  .brief-list p { color: var(--muted); font-size: .92rem; line-height: 1.6; }
+  .capabilities { display: grid; grid-template-columns: .8fr 1.2fr; gap: clamp(36px, 9vw, 130px); padding: 104px 0 18px; }
+  .capabilities h2 { font-size: clamp(2.8rem, 5vw, 5rem); }
+  .capabilities ol { margin: 0; padding: 0; border-top: 1px solid var(--rule); list-style: none; }
+  .capabilities li { display: grid; grid-template-columns: 190px 1fr; gap: 24px; padding: 19px 0; border-bottom: 1px solid var(--rule); }
+  .capabilities strong { font-family: var(--font-mono); font-size: .73rem; letter-spacing: .05em; }
+  .capabilities span { color: var(--muted); }
+  @media (max-width: 800px) { main { padding-inline: 18px; } .hero, .release-brief, .capabilities { grid-template-columns: 1fr; } .hero { min-height: auto; padding: 92px 0 68px; } .hero-mark { max-width: 260px; margin: 12px auto 0; } .brief-list { grid-template-columns: 1fr; } .brief-list article { min-height: auto; border-left: 1px solid var(--rule); border-bottom: 1px solid var(--rule); } .brief-list h3 { margin-top: 28px; } .capabilities { padding-top: 76px; } }
+  @media (max-width: 480px) { h1 { font-size: 4rem; } .capabilities li { grid-template-columns: 1fr; gap: 8px; } }
 </style>

@@ -6,7 +6,7 @@
   let activeSection = $state('');
   
   const sections = [
-    { id: 'quickshell', title: 'Quickshell' },
+    { id: 'watch', title: 'Live Events' },
     { id: 'status-json', title: 'Status JSON' },
     { id: 'waybar', title: 'Waybar' },
     { id: 'tray', title: 'System Tray' }
@@ -73,6 +73,10 @@
   "profile": "default"
 }`;
 
+  const watchCode = `stasis watch
+# {"state":"waiting","paused":false,"manually_paused":false,"profile":"default"}
+# {"state":"manual","paused":true,"manually_paused":true,"profile":"work"}`;
+
   const waybarTextCode = `"custom/stasis": {
   "exec": "stasis info --json",
   "format": "{text}",
@@ -99,7 +103,7 @@ RestartSec=2
 WantedBy=graphical-session.target`;
 </script>
 
-<div class="page-container">
+<div class="page-container docs-page">
   <nav class="links-nav">
     <div class="nav-title">On this page</div>
     <ul>
@@ -120,11 +124,20 @@ WantedBy=graphical-session.target`;
   <main class="content">
     <h1>Integration</h1>
 
-    <section id="quickshell">
-      <h2>Quickshell</h2>
+    <section id="watch">
+      <h2>Live Events</h2>
 
       <p>
-        Quickshell integration is pending upstream support.
+        Stasis 1.4.0 adds <code>stasis watch</code> for custom shells and other integrations. It prints the current
+        state immediately, then writes another JSON object only when the state, pause status, or active
+        profile changes. Any program that can keep a process open and read lines can use it instead of polling
+        <code>stasis info</code>.
+      </p>
+      <CodeBlock code={watchCode} language="bash" />
+      <p>
+        Each line includes <code>state</code>, <code>paused</code>, <code>manually_paused</code>, and
+        <code>profile</code>. The state is one of <code>waiting</code>, <code>active</code>,
+        <code>inhibited</code>, <code>locked</code>, or <code>manual</code>.
       </p>
     </section>
 

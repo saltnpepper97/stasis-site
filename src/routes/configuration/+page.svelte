@@ -81,10 +81,12 @@ debounce_seconds  4
 notify_seconds    5`;
 
   const defaultBlockCode = `default:
-  enable_loginctl false
+  enable_loginctl_integration false
   enable_dbus_inhibit true
   pre_suspend_command None
   #prepare_sleep_command "hyprlock"
+  #low_power_when_idle false
+  #low_power_when_idle_timeout 10
   monitor_media true
   ignore_remote_media true
 
@@ -139,7 +141,7 @@ end`;
 end`;
 
   const enableLoginctlCode = `# Enable global login1 tracking (lock/unlock state)
-enable_loginctl true`;
+enable_loginctl_integration true`;
 
   const enableDbusInhibitCode = `# Enable session-bus inhibit tracking (recommended)
 enable_dbus_inhibit true`;
@@ -178,7 +180,7 @@ end
 work:
   mode "overlay"
 
-  enable_loginctl true
+  enable_loginctl_integration true
   debounce_seconds 10
   monitor_media true
   ignore_remote_media true
@@ -363,7 +365,7 @@ debounce_seconds  4
 notify_seconds    5
 
 default:
-  enable_loginctl false
+  enable_loginctl_integration false
   enable_dbus_inhibit true
   pre_suspend_command None
   #prepare_sleep_command "hyprlock"
@@ -520,7 +522,7 @@ end
 work:
   mode "overlay"
 
-  enable_loginctl true
+  enable_loginctl_integration true
   enable_dbus_inhibit true
   debounce_seconds 10
   monitor_media true
@@ -573,7 +575,7 @@ end
 #   stasis profile default   (or: stasis profile none)`;
 </script>
 
-<div class="page-container">
+<div class="page-container docs-page">
   <nav class="links-nav" aria-label="On this page">
     <div class="nav-title">On this page</div>
     <ul>
@@ -633,17 +635,25 @@ end
 
       <h3>loginctl Integration</h3>
       <p>
-        Set <code>enable_loginctl true</code> under <code>default:</code> to register Stasis with
+        Set <code>enable_loginctl_integration true</code> under <code>default:</code> to register Stasis with
         <code>login1</code> for global lock/unlock state tracking. This is a top-level global setting
         — there is no per-block <code>use_loginctl</code> option.
       </p>
       <CodeBlock code={enableLoginctlCode} language="rune" />
 
       <div class="info">
+        <strong>LockedHint is automatic:</strong> Stasis watches logind's <code>LockedHint</code> property on its
+        own, so there is no separate shell integration to enable. Any shell or lock screen that sets
+        <code>LockedHint</code> when it locks will be detected. The Quickshell LockedHint pull request is available
+        through the <code>quickshell-lockhinted-git</code> AUR package. Noctalia and other shell projects may expose
+        the same property too, but have not been tested with Stasis yet.
+      </div>
+
+      <div class="info">
         <strong>Why use this?</strong>
         <p>
           Without it, Stasis tracks the locker's process lifetime. If your locker daemonizes (runs in the background), Stasis might see it exit immediately and think the screen is already unlocked.
-          Using <code>enable_loginctl</code> switches tracking to D-Bus signals from <code>logind</code>, which is much more robust for background lockers.
+          Using <code>enable_loginctl_integration</code> switches tracking to D-Bus signals from <code>logind</code>, which is much more robust for background lockers.
         </p>
 
         <strong>Wrapper Script Pattern:</strong>
@@ -683,6 +693,19 @@ end
         before Stasis's own <code>suspend:</code> step.
       </p>
       <CodeBlock code={prepareSleepCode} language="rune" />
+
+      <h3>Low-Power Mode</h3>
+      <p>
+        Enable <code>low_power_when_idle</code> to apply conservative GPU power saving after the DPMS
+        step fires. Stasis snapshots every setting it changes and restores the original values on activity,
+        unlock, lid open, profile changes, reload, or shutdown.
+      </p>
+      <CodeBlock code={`# Enter low-power mode 10 seconds after the DPMS step\nlow_power_when_idle true\nlow_power_when_idle_timeout 10`} language="rune" />
+      <div class="info">
+        This requires permission to write the relevant GPU sysfs files. Systems without that access simply
+        skip those settings and continue normally. Use <code>stasis report today</code> or
+        <code>stasis report week</code> to review recorded display-off, low-power, and suspend time.
+      </div>
     </section>
 
     <section id="media">

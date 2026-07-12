@@ -66,7 +66,7 @@ cd stasis`;
   const branchCode = `git checkout -b feature/your-feature-name`;
 </script>
 
-<div class="page-container">
+<div class="page-container docs-page">
   <nav class="links-nav">
     <div class="nav-title">On this page</div>
     <ul>
@@ -185,7 +185,7 @@ cd stasis`;
       
       <div class="steps">
         <div class="step">
-          <div class="step-number">1</div>
+          <div class="step-number">01</div>
           <div class="step-content">
             <h4>Fork the Repository</h4>
             <p>Head over to the <a href="https://github.com/saltnpepper97/stasis" target="_blank" rel="noopener noreferrer">Stasis GitHub repo</a> and fork it to your account.</p>
@@ -193,7 +193,7 @@ cd stasis`;
         </div>
 
         <div class="step">
-          <div class="step-number">2</div>
+          <div class="step-number">02</div>
           <div class="step-content">
             <h4>Clone Your Fork</h4>
             <CodeBlock code={cloneCode} language="bash" />
@@ -201,7 +201,7 @@ cd stasis`;
         </div>
 
         <div class="step">
-          <div class="step-number">3</div>
+          <div class="step-number">03</div>
           <div class="step-content">
             <h4>Create a Branch</h4>
             <CodeBlock code={branchCode} language="bash" />
@@ -209,7 +209,7 @@ cd stasis`;
         </div>
 
         <div class="step">
-          <div class="step-number">4</div>
+          <div class="step-number">04</div>
           <div class="step-content">
             <h4>Make Your Changes</h4>
             <p>Write clear, well-commented code. Test your changes thoroughly before submitting.</p>
@@ -217,7 +217,7 @@ cd stasis`;
         </div>
 
         <div class="step">
-          <div class="step-number">5</div>
+          <div class="step-number">05</div>
           <div class="step-content">
             <h4>Submit a Pull Request</h4>
             <p>Push your branch and open a PR on GitHub. Describe what you've changed and why.</p>
