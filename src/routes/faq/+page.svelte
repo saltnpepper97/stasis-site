@@ -60,9 +60,6 @@
   const serviceLogsCode = `journalctl --user -u stasis.service`;
   const reloadCode = `systemctl --user restart stasis.service`;
   const dumpCode = `stasis dump 200`;
-  const lockerWrapperCode = `#!/usr/bin/env bash
-loginctl lock-session
-swaylock -f`;
 </script>
 
 <div class="page-container docs-page">
@@ -124,16 +121,22 @@ swaylock -f`;
     <section id="locker-loop">
       <h2>Lock Step Fires Repeatedly</h2>
       <p>
-        If Stasis locks, immediately resumes, and then starts the plan again, your locker may be daemonizing.
-        Stasis normally tracks lock state by waiting for the locker process to exit.
+        If Stasis locks, immediately resumes, and starts the plan again, first check which completed-state
+        signal your locker provides.
       </p>
       <ul>
-        <li>Remove fork/daemonize options such as <code>swaylock -f</code> when possible</li>
-        <li>If your locker must fork, set <code>enable_loginctl_integration true</code> and call <code>loginctl lock-session</code> before launching it</li>
+        <li>Foreground lockers are tracked until their process exits</li>
+        <li>Lockers such as Veila publish login1 <code>LockedHint</code>, which Stasis follows automatically</li>
+        <li>Remove fork/daemonize options such as <code>swaylock -f</code> if the locker does not publish <code>LockedHint</code></li>
+        <li>Do not use <code>loginctl lock-session</code> as completion tracking; its lock/unlock signals are requests</li>
         <li>Confirm the loop with recent logs:</li>
       </ul>
       <CodeBlock code={dumpCode} language="bash" />
-      <CodeBlock code={lockerWrapperCode} language="bash" />
+      <div class="info">
+        <strong>Stasis 1.4.1 and newer:</strong>
+        A positive <code>LockedHint</code> takes authority for the current lock episode, so a short-lived
+        locker client can exit without producing a false unlock.
+      </div>
     </section>
 
     <section id="regex-patterns">

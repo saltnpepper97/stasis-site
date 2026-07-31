@@ -28,24 +28,24 @@
   <section class="release-brief" aria-labelledby="release-heading">
     <div class="brief-heading">
       <p class="kicker">Current release</p>
-      <h2 id="release-heading">1.4.0</h2>
-      <p>A tighter relationship with your shell, hardware, and session state.</p>
+      <h2 id="release-heading">1.4.1</h2>
+      <p>More reliable session state, with fewer assumptions about your locker.</p>
     </div>
     <div class="brief-list">
       <article>
         <span>01</span>
-        <h3>Live events</h3>
-        <p><code>stasis watch</code> streams state, pause, and profile changes to custom shell integrations.</p>
+        <h3>Reliable locks</h3>
+        <p><code>LockedHint</code> keeps authority when service-backed locker clients such as Veila exit.</p>
       </article>
       <article>
         <span>02</span>
-        <h3>Lower-power idle</h3>
-        <p>Optional GPU power saving follows DPMS and restores the original settings when you return.</p>
+        <h3>Portable builds</h3>
+        <p>musl Linux builds no longer attempt to link the glibc-only <code>malloc_trim</code> extension.</p>
       </article>
       <article>
         <span>03</span>
-        <h3>Lock-aware sleep</h3>
-        <p>LockedHint tracking and <code>prepare_sleep_command</code> improve awareness around locking and suspend.</p>
+        <h3>Clear boundaries</h3>
+        <p>login1 requests, completed lock state, and sleep/wake monitoring now have distinct roles.</p>
       </article>
     </div>
   </section>

@@ -140,7 +140,7 @@ end`;
   command "notify-send 'Stasis idle manager started!'"
 end`;
 
-  const enableLoginctlCode = `# Enable global login1 tracking (lock/unlock state)
+  const enableLoginctlCode = `# Enable login1 PrepareForSleep monitoring
 enable_loginctl_integration true`;
 
   const enableDbusInhibitCode = `# Enable session-bus inhibit tracking (recommended)
@@ -518,7 +518,7 @@ gaming:
   ]
 end
 
-# work: overlay — longer timeouts, loginctl enabled
+# work: overlay — longer timeouts, login1 sleep/wake monitoring enabled
 work:
   mode "overlay"
 
@@ -633,34 +633,32 @@ end
       <p>The <code>startup:</code> block runs once when Stasis starts (always first):</p>
       <CodeBlock code={startupBlockCode} language="rune" />
 
-      <h3>loginctl Integration</h3>
+      <h3>login1 Sleep/Wake Integration</h3>
       <p>
-        Set <code>enable_loginctl_integration true</code> under <code>default:</code> to register Stasis with
-        <code>login1</code> for global lock/unlock state tracking. This is a top-level global setting
-        — there is no per-block <code>use_loginctl</code> option.
+        Set <code>enable_loginctl_integration true</code> to monitor login1
+        <code>PrepareForSleep</code> transitions. This enables sleep/wake handling, including
+        <code>prepare_sleep_command</code>; it does not select the screen-lock tracking method.
       </p>
       <CodeBlock code={enableLoginctlCode} language="rune" />
 
       <div class="info">
-        <strong>LockedHint is automatic:</strong> Stasis watches logind's <code>LockedHint</code> property on its
-        own, so there is no separate shell integration to enable. Any shell or lock screen that sets
-        <code>LockedHint</code> when it locks will be detected. The Quickshell LockedHint pull request is available
-        through the <code>quickshell-lockhinted-git</code> AUR package. Noctalia and other shell projects may expose
-        the same property too, but have not been tested with Stasis yet.
+        <strong>LockedHint is automatic:</strong> Stasis always watches the session's login1
+        <code>LockedHint</code> property through systemd-logind or eLogind. A positive hint becomes
+        authoritative for that lock episode until the real unlock.
       </div>
 
       <div class="info">
-        <strong>Why use this?</strong>
+        <strong>Locker compatibility:</strong>
         <p>
-          Without it, Stasis tracks the locker's process lifetime. If your locker daemonizes (runs in the background), Stasis might see it exit immediately and think the screen is already unlocked.
-          Using <code>enable_loginctl_integration</code> switches tracking to D-Bus signals from <code>logind</code>, which is much more robust for background lockers.
+          Foreground lockers remain compatible through process-lifetime tracking. Service-backed lockers such
+          as Veila work through <code>LockedHint</code>, so their short-lived client may exit safely after the
+          session is confirmed locked.
         </p>
-
-        <strong>Wrapper Script Pattern:</strong>
-        <p>To use this, create a wrapper script (e.g., <code>~/.local/bin/stasis-lock.sh</code>):</p>
-        <CodeBlock code={`#!/usr/bin/env bash\nloginctl lock-session\nswaylock -f`} language="bash" />
-        <p>Then set your command to use the wrapper:</p>
-        <CodeBlock code={`lock_screen:\n  timeout 300\n  command "~/.local/bin/stasis-lock.sh"`} language="rune" />
+        <p>
+          A locker that forks into the background without publishing <code>LockedHint</code> should be run in
+          the foreground. login1 <code>Lock</code> and <code>Unlock</code> signals are requests rather than
+          completed state, so a <code>loginctl lock-session</code> wrapper is not a reliable substitute.
+        </p>
       </div>
 
       <h3>Session D-Bus Inhibit Integration</h3>

@@ -91,22 +91,6 @@ cargo build --release --locked
 sudo install -Dm755 target/release/stasis /usr/local/bin/stasis
 sudo install -Dm644 assets/stasis.png /usr/local/share/icons/hicolor/256x256/apps/stasis.png`;
 
-  const lockerWrapperCode = `#!/usr/bin/env bash
-# Tell logind we are locking; Stasis listens for this when enable_loginctl_integration is true.
-loginctl lock-session
-
-# Run your locker in the background if it must daemonize or fork.
-swaylock -f`;
-
-  const lockerConfigCode = `default:
-  enable_loginctl_integration true
-
-  lock_screen:
-    timeout 300
-    command "~/.local/bin/stasis-lock.sh"
-  end
-end`;
-  
   const enableServiceCode = `# Reload systemd to recognize the new service
 systemctl --user daemon-reload
 
@@ -155,8 +139,8 @@ systemctl --user enable --now stasis.service`;
     <section id="session">
       <h2>Session Setup</h2>
       <p>
-        Start your compositor inside a real D-Bus session if you use
-        <code>enable_dbus_inhibit</code>, loginctl lock tracking, lid events, or suspend/resume integration.
+        Start your compositor inside a real D-Bus session when using
+        <code>enable_dbus_inhibit</code> or other session-bus features.
       </p>
 
       <div class="note">
@@ -169,20 +153,29 @@ systemctl --user enable --now stasis.service`;
     <section id="lockers">
       <h2>Screen Lockers</h2>
       <p>
-        Stasis normally tracks a lock step by waiting for the configured locker process to exit.
-        If your locker daemonizes or forks immediately, Stasis can interpret that as an immediate unlock.
+        Stasis uses the configured locker process as a compatibility fallback. If the locker or compositor
+        publishes login1 <code>LockedHint=true</code>, that system state automatically becomes authoritative
+        until the real unlock.
       </p>
 
-      <div class="warning">
-        <strong>Do not daemonize unless you also enable loginctl tracking.</strong>
-        Remove options like <code>swaylock -f</code> when possible. If your setup requires a backgrounding locker,
-        use <code>enable_loginctl_integration true</code> and a wrapper script.
+      <div class="note">
+        <strong>No locker mode is required.</strong>
+        Traditional foreground lockers keep working through process tracking. Service-backed lockers such as
+        Veila work through <code>LockedHint</code>, even when their command-line client exits after the secure
+        surface is ready.
       </div>
 
-      <h3>Wrapper Script Pattern</h3>
-      <CodeBlock code={lockerWrapperCode} language="bash" />
-      <p>Save this as <code>~/.local/bin/stasis-lock.sh</code>, make it executable, then reference it from your config:</p>
-      <CodeBlock code={lockerConfigCode} language="rune" />
+      <div class="warning">
+        A locker that forks into the background without publishing <code>LockedHint</code> exposes no reliable
+        unlock state. Run that locker in the foreground. Do not use a <code>loginctl lock-session</code> wrapper:
+        login1 <code>Lock</code> and <code>Unlock</code> are requests, not completed state.
+      </div>
+
+      <p>
+        <code>enable_loginctl_integration</code> controls optional login1 sleep/wake monitoring. It does not
+        select the lock-tracking method; <code>LockedHint</code> monitoring is automatic with systemd-logind
+        and eLogind.
+      </p>
     </section>
  
     <section id="manual">

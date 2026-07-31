@@ -128,7 +128,7 @@ WantedBy=graphical-session.target`;
       <h2>Live Events</h2>
 
       <p>
-        Stasis 1.4.0 adds <code>stasis watch</code> for custom shells and other integrations. It prints the current
+        Stasis 1.4 adds <code>stasis watch</code> for custom shells and other integrations. It prints the current
         state immediately, then writes another JSON object only when the state, pause status, or active
         profile changes. Any program that can keep a process open and read lines can use it instead of polling
         <code>stasis info</code>.
