@@ -1,6 +1,21 @@
 <script lang="ts">
   import { asset, resolve } from '$app/paths';
+  import { page } from '$app/state';
   import ThemeToggle from '$lib/components/ThemeToggle.svelte';
+
+  const links = [
+    { href: '/quick-start', label: 'Start' },
+    { href: '/configuration', label: 'Configure' },
+    { href: '/integration', label: 'Integrate' },
+    { href: '/faq', label: 'FAQ' },
+    { href: '/contributing', label: 'Contribute' }
+  ];
+
+  const currentRoute = $derived(page.route.id ?? '');
+
+  function isActive(href: string) {
+    return currentRoute === href || currentRoute.startsWith(`${href}/`);
+  }
 </script>
 
 <svelte:head>
@@ -17,11 +32,14 @@
 
   <nav aria-label="Primary navigation">
     <ul>
-      <li><a href={resolve('/quick-start')}>Start</a></li>
-      <li><a href={resolve('/configuration')}>Configure</a></li>
-      <li><a href={resolve('/integration')}>Integrate</a></li>
-      <li><a href={resolve('/faq')}>FAQ</a></li>
-      <li><a href={resolve('/contributing')}>Contribute</a></li>
+      {#each links as link (link.href)}
+        <li>
+          <a
+            href={resolve(link.href)}
+            aria-current={isActive(link.href) ? 'page' : undefined}
+          >{link.label}</a>
+        </li>
+      {/each}
     </ul>
   </nav>
 
