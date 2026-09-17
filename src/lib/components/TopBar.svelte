@@ -12,6 +12,7 @@
   ];
 
   const currentRoute = $derived(page.route.id ?? '');
+  const isHome = $derived(currentRoute === '/');
 
   function isActive(href: string) {
     return currentRoute === href || currentRoute.startsWith(`${href}/`);
@@ -25,7 +26,7 @@
 </svelte:head>
 
 <header class="topbar">
-  <a class="brand" href={resolve('/')} aria-label="Stasis home">
+  <a class="brand" href={resolve('/')} aria-label="Stasis home" aria-current={isHome ? 'page' : undefined}>
     <img src={asset('/favicon.png')} alt="" class="brand-icon" />
     <span class="title">Stasis</span>
   </a>
