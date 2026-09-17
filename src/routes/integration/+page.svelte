@@ -7,6 +7,7 @@
   
   const sections = [
     { id: 'watch', title: 'Live Events' },
+    { id: 'blame', title: 'Blame' },
     { id: 'status-json', title: 'Status JSON' },
     { id: 'waybar', title: 'Waybar' },
     { id: 'tray', title: 'System Tray' }
@@ -77,6 +78,37 @@
 # {"state":"waiting","paused":false,"manually_paused":false,"profile":"default"}
 # {"state":"manual","paused":true,"manually_paused":true,"profile":"work"}`;
 
+  const blameCliCode = `stasis blame
+stasis blame --json`;
+
+  const blameJsonCode = `{
+  "schema_version": 1,
+  "generated_at_ms": 1750000000000,
+  "progression_blocked": true,
+  "manual_pause": false,
+  "system_pause": false,
+  "browser_source_capture": false,
+  "app_inhibitors": { "active": false, "count": 0, "sources": [] },
+  "media_inhibitors": { "active": false, "count": 0, "sources": [] },
+  "suspend_app_inhibitors": { "active": false, "count": 0, "sources": [] },
+  "suspend_media_inhibitors": { "active": false, "count": 0, "sources": [] },
+  "dbus_holds": [],
+  "login1_idle_holds": [
+    {
+      "status": "live",
+      "what": "idle",
+      "who": "codex",
+      "why": "Codex is running an active turn",
+      "mode": "block",
+      "uid": 1000,
+      "pid": 42,
+      "process": "codex",
+      "started_at_ms": 1749999996500,
+      "age_ms": 3500
+    }
+  ]
+}`;
+
   const waybarTextCode = `"custom/stasis": {
   "exec": "stasis info --json",
   "format": "{text}",
@@ -128,7 +160,7 @@ WantedBy=graphical-session.target`;
       <h2>Live Events</h2>
 
       <p>
-        Stasis 1.4 adds <code>stasis watch</code> for custom shells and other integrations. It prints the current
+        <code>stasis watch</code> prints the current
         state immediately, then writes another JSON object only when the state, pause status, or active
         profile changes. Any program that can keep a process open and read lines can use it instead of polling
         <code>stasis info</code>.
@@ -141,6 +173,25 @@ WantedBy=graphical-session.target`;
       </p>
     </section>
 
+    <section id="blame">
+      <h2>Blame</h2>
+
+      <p>
+        <code>stasis blame</code> explains why an idle action is held. It names active manual and
+        system pauses, matched applications and media, suspend-only blockers, live D-Bus inhibit
+        cookies or portal request handles, and login1 idle holds. Use
+        <code>stasis blame --json</code> for a versioned snapshot that scripts can parse.
+      </p>
+      <CodeBlock code={blameCliCode} language="bash" />
+      <p>
+        The JSON form uses <code>schema_version</code> 1. Categories include
+        <code>app_inhibitors</code>, <code>media_inhibitors</code>,
+        <code>suspend_app_inhibitors</code>, and <code>suspend_media_inhibitors</code>.
+        Live D-Bus and login1 holds are listed separately.
+      </p>
+      <CodeBlock code={blameJsonCode} language="json" />
+    </section>
+
     <section id="status-json">
       <h2>Status JSON</h2>
       <p>
@@ -150,7 +201,9 @@ WantedBy=graphical-session.target`;
       <p>
         The <code>alt</code> and <code>class</code> fields are intended for icon mapping and CSS styling. Tooltips include
         the active profile, plan source, state, manual pause status, app/media inhibitor counts, D-Bus inhibit state,
-        and the next pending action when available.
+        login1 idle inhibitors that are blocking suspend, and the next pending action when available.
+        When one or more login1 idle holds are present, <code>stasis info --json</code> also includes a
+        <code>login1_idle_inhibitors</code> array.
       </p>
       <CodeBlock code={statusJsonCode} language="json" />
     </section>
@@ -184,6 +237,9 @@ WantedBy=graphical-session.target`;
       <p>
         The tray tooltip shows the current Stasis state. Its menu provides actions to toggle
         manual inhibition, pause, resume, reload the config, and quit only the tray process.
+        Only one tray instance is allowed per desktop session; additional launches exit cleanly.
+        The shell title is <code>Stasis</code>. The menu includes a disabled status row so hosts
+        such as Waybar still show the current state, including <code>Stasis paused (manually)</code>.
       </p>
 
       <div class="info-card">

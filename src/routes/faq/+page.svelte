@@ -10,6 +10,7 @@
   const sections: Section[] = [
     { id: 'app-detection', title: 'App Detection' },
     { id: 'dbus-media', title: 'D-Bus & Media' },
+    { id: 'suspend-only', title: 'Suspend-Only Holds' },
     { id: 'locker-loop', title: 'Locker Issues' },
     { id: 'regex-patterns', title: 'Regex Patterns' },
     { id: 'service-issues', title: 'Service Issues' },
@@ -60,6 +61,7 @@
   const serviceLogsCode = `journalctl --user -u stasis.service`;
   const reloadCode = `systemctl --user restart stasis.service`;
   const dumpCode = `stasis dump 200`;
+  const blameCode = `stasis blame`;
 </script>
 
 <div class="page-container docs-page">
@@ -93,6 +95,10 @@
         <li>Check that the app names in <code>inhibit_apps</code> match the actual application names</li>
         <li>For Halley, patterns match window <code>app_id</code> values from <code>halleyctl node list --json</code></li>
         <li>
+          Use <code>stasis blame</code> to see which applications, media, D-Bus, or login1 idle holds
+          are currently blocking idle
+        </li>
+        <li>
           Use <code>stasis -v</code> or check <code>~/.local/state/stasis/stasis.log</code> for detailed logs on detected apps
         </li>
       </ul>
@@ -106,16 +112,33 @@
         PulseAudio or PipeWire Pulse.
       </p>
       <ul>
-        <li>Keep <code>enable_dbus_inhibit true</code> for browser, Steam, and portal inhibit traffic</li>
+        <li>Keep <code>enable_dbus_inhibit true</code> for browser, Steam, portal inhibit traffic, and blocking login1 idle inhibitors</li>
         <li>Start the compositor inside a real D-Bus session so session-bus monitoring is available</li>
         <li>Install <code>pulseaudio</code> or <code>pipewire-pulse</code> so <code>pactl</code> is available</li>
         <li>Use <code>media_blacklist</code> only for media sources you want to ignore</li>
+        <li>Use <code>suspend_inhibit_media</code> when playback should still allow lock and DPMS, but not automatic suspend</li>
       </ul>
       <div class="warning">
         <strong>Web Discord limitation</strong>
         Browser/portal behavior can still drop inhibits during some web Discord calls when no microphone
         source-output is attached. This is a browser/portal signal limitation rather than a normal config error.
       </div>
+    </section>
+
+    <section id="suspend-only">
+      <h2>Lock and DPMS Run, but Suspend Waits</h2>
+      <p>
+        That can be intentional. Suspend-only holds block automatic sleep while earlier plan steps
+        continue. They come from <code>suspend_inhibit_apps</code>, <code>suspend_inhibit_media</code>,
+        or blocking login1 <code>idle</code> inhibitors discovered through
+        <code>enable_dbus_inhibit</code>.
+      </p>
+      <ul>
+        <li>When the last matching hold clears, Stasis resumes the remaining suspend timeout</li>
+        <li>Manual <code>stasis trigger suspend</code> still runs immediately</li>
+        <li>Confirm the current blockers with:</li>
+      </ul>
+      <CodeBlock code={blameCode} language="bash" />
     </section>
 
     <section id="locker-loop">
@@ -179,6 +202,11 @@
         <li>Restart the service if reload continues to fail:</li>
       </ul>
       <CodeBlock code={reloadCode} language="bash" />
+      <p>
+        Configuration upgrades preserve customized files and symlinks. Stasis renames only known
+        legacy keys and backfills compatibility fields instead of replacing the entire file with
+        the current bootstrap.
+      </p>
     </section>
 
     <section id="config-errors">

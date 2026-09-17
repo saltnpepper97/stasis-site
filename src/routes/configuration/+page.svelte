@@ -93,6 +93,9 @@ notify_seconds    5`;
   # Optional: ignore these media sources (case-insensitive)
   #media_blacklist ["spotify"]
 
+  # Matching media blocks only suspend; other eligible media pauses the full plan.
+  #suspend_inhibit_media ["spotify" "mpd"]
+
   debounce_seconds debounce_seconds
 
   # Lid actions (laptop only — live here so they apply to both ac: and battery:)
@@ -108,6 +111,11 @@ notify_seconds    5`;
   inhibit_apps [
     r"steam_app_.*"
   ]
+
+  # Apps that block only automatic suspend while allowing earlier idle actions.
+  #suspend_inhibit_apps [
+  #  "handbrake"
+  #]
 
   startup:
     timeout 0
@@ -240,6 +248,8 @@ ignore_remote_media true`;
 
   const mediaBlacklistCode = `media_blacklist ["spotify", "rhythmbox"]`;
 
+  const suspendInhibitMediaCode = `suspend_inhibit_media ["spotify" "mpd"]`;
+
   const appInhibitorsCode = `inhibit_apps [
   "vlc"
   "Spotify"
@@ -247,6 +257,10 @@ ignore_remote_media true`;
   r".*\\.exe"
   r"steam_app_.*"
   r"firefox.*"
+]`;
+
+  const suspendInhibitAppsCode = `suspend_inhibit_apps [
+  "handbrake"
 ]`;
 
   const notifyOnUnpauseCode = `notify_on_unpause true`;
@@ -375,6 +389,9 @@ default:
   # Optional: ignore these media sources for media inhibit (case-insensitive)
   #media_blacklist ["spotify"]
 
+  # Matching media blocks only suspend; other eligible media pauses the full plan.
+  suspend_inhibit_media ["spotify" "mpd"]
+
   debounce_seconds debounce_seconds
 
   # Lid actions (laptop only — live here so they apply to both ac: and battery:)
@@ -399,6 +416,11 @@ default:
     r".*\\.exe"
     r"steam_app_.*"
     r"firefox.*"
+  ]
+
+  # Apps that block only automatic suspend while allowing earlier idle actions.
+  suspend_inhibit_apps [
+    "handbrake"
   ]
 
   # ----------------------------------------------------------------
@@ -607,6 +629,11 @@ end
         On first run, Stasis generates a default configuration at <code>~/.config/stasis/stasis.rune</code>.
       </p>
       <p>
+        When Stasis upgrades an existing configuration, it preserves customized files and
+        symlinks, renames only known legacy keys, and backfills compatibility fields instead of
+        replacing the file with the current bootstrap.
+      </p>
+      <p>
         The master reference config is located at <code>/usr/share/doc/stasis/stasis.rune</code>.
       </p>
     </section>
@@ -664,7 +691,9 @@ end
       <h3>Session D-Bus Inhibit Integration</h3>
       <p>
         Keep session-bus inhibit handling enabled so desktop/session requests (including portal inhibits)
-        are honored correctly:
+        are honored correctly. The same gate also discovers blocking login1 <code>idle</code> inhibitors
+        from systemd-logind and treats them as suspend-only holds, so tools such as Codex can prevent
+        automatic sleep while lock, DPMS, and other earlier plan steps still run.
       </p>
       <CodeBlock code={enableDbusInhibitCode} language="rune" />
       <div class="info">
@@ -713,13 +742,23 @@ end
       <p>Control whether Stasis monitors media playback to prevent idle actions:</p>
       <CodeBlock code={mediaMonitoringCode} language="rune" />
       <ul>
-        <li><code>monitor_media</code> — active playback prevents idle timeouts</li>
+        <li><code>monitor_media</code> — active playback can inhibit idle; sources in <code>suspend_inhibit_media</code> block only automatic suspend</li>
         <li><code>ignore_remote_media</code> — ignores remote sources (Spotify remote, KDEConnect, etc.)</li>
       </ul>
 
       <h3>Media Blacklist</h3>
       <p>Ignore specific media sources (case-insensitive):</p>
       <CodeBlock code={mediaBlacklistCode} language="rune" />
+
+      <h3>Suspend-Only Media</h3>
+      <p>
+        <code>suspend_inhibit_media</code> lets selected monitored media sources block only automatic
+        suspend. Lock, DPMS, and hardware low-power mode continue. Other eligible media keeps the
+        historical full-plan inhibit. Media blacklist and remote-player filters are applied first.
+        When the last matching inhibitor clears, Stasis resumes the remaining suspend timeout.
+        Manual <code>stasis trigger suspend</code> still runs immediately.
+      </p>
+      <CodeBlock code={suspendInhibitMediaCode} language="rune" />
     </section>
 
     <section id="inhibitors">
@@ -728,6 +767,14 @@ end
       <h3>Application Inhibitors</h3>
       <p>Specify apps/processes that prevent idle actions while running (strings or regex literals):</p>
       <CodeBlock code={appInhibitorsCode} language="rune" />
+
+      <h3>Suspend-Only Applications</h3>
+      <p>
+        <code>suspend_inhibit_apps</code> uses the same pattern syntax, but matching processes block
+        only the automatic suspend step. Earlier idle-plan actions continue. The remaining suspend
+        timeout is preserved and resumed when the last matching inhibitor clears.
+      </p>
+      <CodeBlock code={suspendInhibitAppsCode} language="rune" />
 
       <div class="info">
         <strong>Regex Pattern Guidelines:</strong>
@@ -759,7 +806,7 @@ end
 
       <h3>Notification Icons</h3>
       <p>
-        Stasis 1.3.0 passes an icon to <code>notify-send</code> for generated notifications.
+        Stasis passes an icon to <code>notify-send</code> for generated notifications.
         Packaged installs provide the default <code>stasis</code> icon, and you can override or clear it globally.
       </p>
       <CodeBlock code={notificationIconCode} language="rune" />
@@ -838,7 +885,7 @@ end
       <h2>Full Example</h2>
       <p>
         Complete example covering desktop plan, laptop AC/battery plans, notification icons, sleep hooks,
-        and both profile modes (<code>overlay</code> and <code>fresh</code>):
+        suspend-only inhibitors, and both profile modes (<code>overlay</code> and <code>fresh</code>):
       </p>
       <CodeBlock code={fullExampleCode} language="rune" />
     </section>

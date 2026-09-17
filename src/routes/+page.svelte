@@ -28,24 +28,24 @@
   <section class="release-brief" aria-labelledby="release-heading">
     <div class="brief-heading">
       <p class="kicker">Current release</p>
-      <h2 id="release-heading">1.4.1</h2>
-      <p>More reliable session state, with fewer assumptions about your locker.</p>
+      <h2 id="release-heading">1.6.3</h2>
+      <p>See why idle is held, and keep lock and DPMS running while suspend waits.</p>
     </div>
     <div class="brief-list">
       <article>
         <span>01</span>
-        <h3>Reliable locks</h3>
-        <p><code>LockedHint</code> keeps authority when service-backed locker clients such as Veila exit.</p>
+        <h3>Named blockers</h3>
+        <p><code>stasis blame</code> reports manual, app, media, D-Bus, and login1 idle holds, including a stable <code>--json</code> form.</p>
       </article>
       <article>
         <span>02</span>
-        <h3>Portable builds</h3>
-        <p>musl Linux builds no longer attempt to link the glibc-only <code>malloc_trim</code> extension.</p>
+        <h3>Suspend-only holds</h3>
+        <p><code>suspend_inhibit_apps</code>, <code>suspend_inhibit_media</code>, and login1 idle inhibitors block sleep without freezing earlier plan steps.</p>
       </article>
       <article>
         <span>03</span>
-        <h3>Clear boundaries</h3>
-        <p>login1 requests, completed lock state, and sleep/wake monitoring now have distinct roles.</p>
+        <h3>Visible tray state</h3>
+        <p>The tray keeps a status row for hosts such as Waybar, and still shows <code>Stasis paused (manually)</code> when you pause it yourself.</p>
       </article>
     </div>
   </section>
@@ -59,7 +59,7 @@
       <li><strong>01 / Ordered actions</strong><span>Build a plan that dims, locks, powers down displays, and suspends on your timing.</span></li>
       <li><strong>02 / Real activity</strong><span>Media, applications, portals, and compositor activity can keep the plan from firing at the wrong time.</span></li>
       <li><strong>03 / Profiles</strong><span>Switch between focused, gaming, presentation, or laptop setups without rewriting your base config.</span></li>
-      <li><strong>04 / Observable state</strong><span>Use the tray, status JSON, or the event stream to make Stasis visible in the rest of your desktop.</span></li>
+      <li><strong>04 / Observable state</strong><span>Use the tray, status JSON, event stream, or <code>stasis blame</code> to make Stasis visible in the rest of your desktop.</span></li>
     </ol>
   </section>
 </main>
