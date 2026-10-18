@@ -121,7 +121,7 @@ systemctl --user enable --now stasis.service`;
     <section id="install">
       <h2>Installation</h2>
       <p>Install Stasis from your package manager when available, or build it from source.</p>
-      <p>These docs preview 1.7.0, which is not released yet. Source builds from main include the upcoming changes; the current stable version is 1.6.3.</p>
+      <p>These docs cover Stasis 1.7.0. Update your installed package to use automatic game detection, controller activity, and native PipeWire monitoring.</p>
 
       <h3>Arch Linux</h3>
       <CodeBlock code={archInstallCode} language="bash" />

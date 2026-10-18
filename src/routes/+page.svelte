@@ -27,9 +27,10 @@
 
   <section class="release-brief" aria-labelledby="release-heading">
     <div class="brief-heading">
-      <p class="kicker">Upcoming release</p>
+      <p class="kicker">Current release</p>
       <h2 id="release-heading">1.7.0</h2>
-      <p>In preparation. The current stable release is 1.6.3.</p>
+      <p>Automatic game detection, controller activity, and native audio monitoring.
+        <a href="https://github.com/saltnpepper97/stasis/releases/tag/v1.7.0">Read the release notes →</a></p>
     </div>
     <div class="brief-list">
       <article>
