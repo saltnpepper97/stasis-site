@@ -89,6 +89,7 @@ stasis blame --json`;
   "system_pause": false,
   "browser_source_capture": false,
   "app_inhibitors": { "active": false, "count": 0, "sources": [] },
+  "game_inhibitors": { "active": false, "count": 0, "sources": [] },
   "media_inhibitors": { "active": false, "count": 0, "sources": [] },
   "suspend_app_inhibitors": { "active": false, "count": 0, "sources": [] },
   "suspend_media_inhibitors": { "active": false, "count": 0, "sources": [] },
@@ -178,14 +179,16 @@ WantedBy=graphical-session.target`;
 
       <p>
         <code>stasis blame</code> explains why an idle action is held. It names active manual and
-        system pauses, matched applications and media, suspend-only blockers, live D-Bus inhibit
+        system pauses, matched applications, games and media, suspend-only blockers, live D-Bus inhibit
         cookies or portal request handles, and login1 idle holds. Use
         <code>stasis blame --json</code> for a versioned snapshot that scripts can parse.
       </p>
       <CodeBlock code={blameCliCode} language="bash" />
+      <p>Human output lists only active blockers and prints <code>No current blockers</code> when clear.
+        Use <code>stasis info</code> for state, timing, effective configuration, and detection diagnostics.</p>
       <p>
         The JSON form uses <code>schema_version</code> 1. Categories include
-        <code>app_inhibitors</code>, <code>media_inhibitors</code>,
+        <code>app_inhibitors</code>, <code>game_inhibitors</code>, <code>media_inhibitors</code>,
         <code>suspend_app_inhibitors</code>, and <code>suspend_media_inhibitors</code>.
         Live D-Bus and login1 holds are listed separately.
       </p>
@@ -205,6 +208,9 @@ WantedBy=graphical-session.target`;
         When one or more login1 idle holds are present, <code>stasis info --json</code> also includes a
         <code>login1_idle_inhibitors</code> array.
       </p>
+      <p>The <code>games</code> object reports monitoring, catalogue size, running and ignored games,
+        and errors. The <code>gamepad</code> object reports monitoring, devices, recent input, and
+        the last activity timestamp. These remain available to panels and the tray.</p>
       <CodeBlock code={statusJsonCode} language="json" />
     </section>
     
@@ -235,8 +241,9 @@ WantedBy=graphical-session.target`;
       </p>
 
       <p>
-        The tray tooltip shows the current Stasis state. Its menu provides actions to toggle
-        manual inhibition, pause, resume, reload the config, and quit only the tray process.
+        The tray tooltip shows the current Stasis state, game details, and controller activity.
+        Its menu provides toggle inhibition, one Pause or Resume action following the manual pause state,
+        reload config, and quit only the tray process.
         Only one tray instance is allowed per desktop session; additional launches exit cleanly.
         The shell title is <code>Stasis</code>. The menu includes a disabled status row so hosts
         such as Waybar still show the current state, including <code>Stasis paused (manually)</code>.

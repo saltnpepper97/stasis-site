@@ -108,13 +108,13 @@
       <h2>D-Bus Inhibits or Media Not Working</h2>
       <p>
         Browser and portal inhibit requests are handled by <code>enable_dbus_inhibit</code>, not by
-        <code>monitor_media</code>. Audio playback and call detection use <code>pactl</code> through
-        PulseAudio or PipeWire Pulse.
+        <code>monitor_media</code>. Audio playback and microphone detection prefer native PipeWire
+        through a persistent <code>pw-dump --monitor</code> connection, with native PulseAudio as a fallback.
       </p>
       <ul>
         <li>Keep <code>enable_dbus_inhibit true</code> for browser, Steam, portal inhibit traffic, and blocking login1 idle inhibitors</li>
         <li>Start the compositor inside a real D-Bus session so session-bus monitoring is available</li>
-        <li>Install <code>pulseaudio</code> or <code>pipewire-pulse</code> so <code>pactl</code> is available</li>
+        <li>Install <code>pw-dump</code> for PipeWire, or <code>pactl</code> for a genuine PulseAudio server; Stasis does not require <code>pipewire-pulse</code></li>
         <li>Use <code>media_blacklist</code> only for media sources you want to ignore</li>
         <li>Use <code>suspend_inhibit_media</code> when playback should still allow lock and DPMS, but not automatic suspend</li>
       </ul>
@@ -203,9 +203,9 @@
       </ul>
       <CodeBlock code={reloadCode} language="bash" />
       <p>
-        Configuration upgrades preserve customized files and symlinks. Stasis renames only known
-        legacy keys and backfills compatibility fields instead of replacing the entire file with
-        the current bootstrap.
+        Stasis never rewrites, migrates, or backs up existing configuration files or symlinks.
+        Missing settings use defaults in memory; explicit values and comments stay untouched.
+        Legacy keys remain readable. Edit your config and run <code>stasis reload</code> to apply changes.
       </p>
     </section>
 

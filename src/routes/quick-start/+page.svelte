@@ -121,6 +121,7 @@ systemctl --user enable --now stasis.service`;
     <section id="install">
       <h2>Installation</h2>
       <p>Install Stasis from your package manager when available, or build it from source.</p>
+      <p>These docs preview 1.7.0, which is not released yet. Source builds from main include the upcoming changes; the current stable version is 1.6.3.</p>
 
       <h3>Arch Linux</h3>
       <CodeBlock code={archInstallCode} language="bash" />
@@ -130,8 +131,9 @@ systemctl --user enable --now stasis.service`;
 
       <h3>From Source</h3>
       <p>
-        Runtime dependencies include Wayland, D-Bus, and <code>pulseaudio</code> or
-        <code>pipewire-pulse</code> for media detection through <code>pactl</code>.
+        Runtime dependencies include Wayland and D-Bus. Audio monitoring uses native PipeWire
+        with <code>pw-dump</code>, or native PulseAudio with <code>pactl</code>.
+        Stasis does not require <code>pipewire-pulse</code>. Game discovery uses bundled SQLite.
       </p>
       <CodeBlock code={sourceInstallCode} language="bash" />
     </section>

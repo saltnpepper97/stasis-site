@@ -9,7 +9,7 @@
     { href: '/integration', label: 'Integrate' },
     { href: '/faq', label: 'FAQ' },
     { href: '/contributing', label: 'Contribute' }
-  ];
+  ] as const;
 
   const currentRoute = $derived(page.route.id ?? '');
   const isHome = $derived(currentRoute === '/');

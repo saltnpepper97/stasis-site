@@ -12,6 +12,7 @@
     { id: 'globals', title: 'Globals (Variables)' },
     { id: 'default-block', title: 'Default Block' },
     { id: 'media', title: 'Media Monitoring' },
+    { id: 'games', title: 'Games & Controllers' },
     { id: 'inhibitors', title: 'Inhibitors' },
     { id: 'notifications', title: 'Notifications' },
     { id: 'laptop', title: 'Laptop Settings' },
@@ -87,6 +88,11 @@ notify_seconds    5`;
   #prepare_sleep_command "hyprlock"
   #low_power_when_idle false
   #low_power_when_idle_timeout 10
+  monitor_gamepad true
+  monitor_games true
+  game_blacklist [ ]
+  extra_games [ ]
+  pause_on_lid_close true
   monitor_media true
   ignore_remote_media true
 
@@ -108,9 +114,7 @@ notify_seconds    5`;
   notify_before_action true
   notification_icon "stasis"
 
-  inhibit_apps [
-    r"steam_app_.*"
-  ]
+  inhibit_apps [ ]
 
   # Apps that block only automatic suspend while allowing earlier idle actions.
   #suspend_inhibit_apps [
@@ -177,12 +181,10 @@ prepare_sleep_command ""`;
 gaming:
   mode "overlay"  # merges on top of active base
 
-  # Replace the inherited inhibit_apps list:
-  inhibit_apps [
-    r".*\\.exe"
-    r"steam_app_.*"
-    r".*\\.x86_64"
-  ]
+  # Automatic game detection; no broad executable rules needed.
+  monitor_games true
+  game_blacklist [ ]
+  extra_games [ ]
 end
 
 work:
@@ -190,6 +192,11 @@ work:
 
   enable_loginctl_integration true
   debounce_seconds 10
+  monitor_gamepad true
+  monitor_games true
+  game_blacklist [ ]
+  extra_games [ ]
+  pause_on_lid_close true
   monitor_media true
   ignore_remote_media true
 
@@ -254,8 +261,6 @@ ignore_remote_media true`;
   "vlc"
   "Spotify"
   "mpv"
-  r".*\\.exe"
-  r"steam_app_.*"
   r"firefox.*"
 ]`;
 
@@ -383,6 +388,11 @@ default:
   enable_dbus_inhibit true
   pre_suspend_command None
   #prepare_sleep_command "hyprlock"
+  monitor_gamepad true
+  monitor_games true
+  game_blacklist [ ]
+  extra_games [ ]
+  pause_on_lid_close true
   monitor_media true
   ignore_remote_media true  # ignore remote players (spotify/kdeconnect/etc.)
 
@@ -413,8 +423,6 @@ default:
     "mpv"
     "vlc"
     "Spotify"
-    r".*\\.exe"
-    r"steam_app_.*"
     r"firefox.*"
   ]
 
@@ -529,15 +537,13 @@ end
 # mode "fresh":   starts from nothing — define every global and action block you want
 # --------------------------------------------------------------------
 
-# gaming: overlay — only replace inhibit_apps
+# gaming: overlay — use automatic game detection
 gaming:
   mode "overlay"
 
-  inhibit_apps [
-    r".*\\.exe"
-    r"steam_app_.*"
-    r".*\\.x86_64"
-  ]
+  monitor_games true
+  game_blacklist [ ]
+  extra_games [ ]
 end
 
 # work: overlay — longer timeouts, login1 sleep/wake monitoring enabled
@@ -547,6 +553,11 @@ work:
   enable_loginctl_integration true
   enable_dbus_inhibit true
   debounce_seconds 10
+  monitor_gamepad true
+  monitor_games true
+  game_blacklist [ ]
+  extra_games [ ]
+  pause_on_lid_close true
   monitor_media true
   ignore_remote_media true
 
@@ -629,9 +640,9 @@ end
         On first run, Stasis generates a default configuration at <code>~/.config/stasis/stasis.rune</code>.
       </p>
       <p>
-        When Stasis upgrades an existing configuration, it preserves customized files and
-        symlinks, renames only known legacy keys, and backfills compatibility fields instead of
-        replacing the file with the current bootstrap.
+        Existing configuration files and symlinks are never rewritten, migrated, or backed up.
+        Missing settings use built-in defaults in memory; explicit values and comments stay intact.
+        Legacy names remain readable, with current names taking precedence.
       </p>
       <p>
         The master reference config is located at <code>/usr/share/doc/stasis/stasis.rune</code>.
@@ -746,6 +757,10 @@ end
         <li><code>ignore_remote_media</code> — ignores remote sources (Spotify remote, KDEConnect, etc.)</li>
       </ul>
 
+      <p>Audio monitoring prefers a persistent native PipeWire connection through <code>pw-dump --monitor</code>.
+        If unavailable, Stasis can use <code>pactl</code> against a genuine PulseAudio server.
+        PipeWire Pulse compatibility servers are not used as a fallback.</p>
+
       <h3>Media Blacklist</h3>
       <p>Ignore specific media sources (case-insensitive):</p>
       <CodeBlock code={mediaBlacklistCode} language="rune" />
@@ -759,6 +774,33 @@ end
         Manual <code>stasis trigger suspend</code> still runs immediately.
       </p>
       <CodeBlock code={suspendInhibitMediaCode} language="rune" />
+    </section>
+
+    <section id="games">
+      <h2>Games and Controllers</h2>
+      <CodeBlock code={`default:
+  monitor_games true
+  game_blacklist ["aseprite" "steam:440"]
+  extra_games ["jazz2.exe" "/games/GOG/My Game"]
+  monitor_gamepad true
+end`} language="rune" />
+      <p><code>monitor_games</code> defaults to true. Stasis discovers installed games from supported
+        launchers including Steam, Heroic, Lutris, Bottles, Minecraft launchers, Itch, and Faugus.
+        Only a running game holds the plan; discovery never launches games. Runtime matching uses
+        process paths, Wine/Proton identities, Minecraft instance arguments, and Steam app windows.</p>
+      <p><code>game_blacklist</code> ignores titles, identities, sources, or installation paths using
+        substring literals or regexes. <code>extra_games</code> supplements discovery with exact
+        executable names, app IDs, installation paths, or regexes. The blacklist applies to both
+        sources; <code>monitor_games false</code> disables both. Profiles and reload apply changes.</p>
+      <p>Remove old broad game rules from <code>inhibit_apps</code> if you want the game blacklist
+        to release those holds. Explicit app rules, media, D-Bus holds, and controller input remain independent.</p>
+      <p><code>monitor_gamepad</code> also defaults to true and works outside games. Buttons, D-pad,
+        sticks, and triggers reset idle timers; held controls keep the session active. A connected
+        controller at rest does not block idle. Sticks and triggers use a 15% deadzone, respecting
+        larger driver-reported deadzones. Stasis needs read access to the controller's
+        <code>/dev/input/event*</code> device and never grabs it.</p>
+      <p>Use <code>stasis info</code> for discovery diagnostics and controller activity,
+        <code>stasis blame</code> for active game holds, and the tray tooltip for detailed status.</p>
     </section>
 
     <section id="inhibitors">
@@ -821,10 +863,17 @@ end
       <p>
         Configure what happens when the laptop lid closes or opens. These live directly under
         <code>default:</code> so they automatically apply to both <code>ac:</code> and
-        <code>battery:</code> plans without duplication. Lid close/open also pause/resume the plan
-        timers regardless. A profile can override or clear them.
+        <code>battery:</code> plans without duplication. By default, <code>pause_on_lid_close true</code>
+        pauses timers on lid closure. A profile can override or clear the actions.
       </p>
       <CodeBlock code={lidActionsCode} language="rune" />
+      <p>Set <code>pause_on_lid_close false</code> to start a fresh plan countdown on lid closure.
+        The close action runs immediately; manual pauses and inhibitors still apply. Opening the lid
+        cancels the countdown, runs applicable resume actions, and waits for normal compositor idle.</p>
+      <p>With the default policy, starting with the lid already closed records its state without
+        running the close action or pausing normal idle timers. Grace mode instead starts its countdown.
+        Enable <code>enable_loginctl_integration true</code> for wake handling. Stasis does not change
+        logind or desktop power-manager lid policies; those must allow the configured grace period.</p>
 
       <h3>Debounce</h3>
       <p>Prevent rapid lid open/close events from triggering multiple actions:</p>

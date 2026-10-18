@@ -4,13 +4,13 @@
   --font-mono: 'IBM Plex Mono', 'SFMono-Regular', Consolas, monospace;
   --content-width: 1240px;
   --reading-width: 760px;
-  --rule: #d8d4cb;
-  --ink: #191b1f;
-  --muted: #64666d;
-  --paper: #f5f2eb;
-  --surface: #fffdf8;
-  --signal: #0057d9;
-  --signal-soft: #dce8ff;
+  --rule: #cbd8e8;
+  --ink: #10223d;
+  --muted: #52647b;
+  --paper: #f1f6fc;
+  --surface: #ffffff;
+  --signal: #1c58db;
+  --signal-soft: #e3eeff;
   --warning: #9d3d16;
   --warning-soft: #fff0e6;
   /* Compatibility aliases for the existing small components. */
@@ -32,13 +32,13 @@
 }
 
 [data-theme="dark"] {
-  --rule: #31353b;
-  --ink: #f0ede5;
-  --muted: #aaa9a2;
-  --paper: #151719;
-  --surface: #1d2024;
-  --signal: #82aaff;
-  --signal-soft: #1c3155;
+  --rule: #2b3d58;
+  --ink: #e8f2ff;
+  --muted: #a8bad4;
+  --paper: #0c1424;
+  --surface: #132039;
+  --signal: #7bbdff;
+  --signal-soft: #193963;
   --warning: #f0a77e;
   --warning-soft: #3b2920;
   --bg-primary: var(--paper);
@@ -59,13 +59,13 @@
 }
 
 [data-theme="light"] {
-  --rule: #d8d4cb;
-  --ink: #191b1f;
-  --muted: #64666d;
-  --paper: #f5f2eb;
-  --surface: #fffdf8;
-  --signal: #0057d9;
-  --signal-soft: #dce8ff;
+  --rule: #cbd8e8;
+  --ink: #10223d;
+  --muted: #52647b;
+  --paper: #f1f6fc;
+  --surface: #ffffff;
+  --signal: #1c58db;
+  --signal-soft: #e3eeff;
   --warning: #9d3d16;
   --warning-soft: #fff0e6;
   --bg-primary: var(--paper);
@@ -104,7 +104,7 @@ body {
   line-height: 1.65;
 }
 
-::selection { background: var(--signal); color: #fff; }
+::selection { background: var(--signal); color: var(--surface); }
 
 a { color: inherit; }
 

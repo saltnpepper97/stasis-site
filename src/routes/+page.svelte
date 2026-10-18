@@ -19,7 +19,7 @@
 
     <div class="hero-mark" aria-hidden="true">
       <div class="mark-frame">
-        <img src={asset('/favicon.png')} alt="" />
+        <img src={asset('/stasis.png')} alt="" />
       </div>
       <p>Idle, without the surprises.</p>
     </div>
@@ -27,25 +27,25 @@
 
   <section class="release-brief" aria-labelledby="release-heading">
     <div class="brief-heading">
-      <p class="kicker">Current release</p>
-      <h2 id="release-heading">1.6.3</h2>
-      <p>See why idle is held, and keep lock and DPMS running while suspend waits.</p>
+      <p class="kicker">Upcoming release</p>
+      <h2 id="release-heading">1.7.0</h2>
+      <p>In preparation. The current stable release is 1.6.3.</p>
     </div>
     <div class="brief-list">
       <article>
         <span>01</span>
-        <h3>Named blockers</h3>
-        <p><code>stasis blame</code> reports manual, app, media, D-Bus, and login1 idle holds, including a stable <code>--json</code> form.</p>
+        <h3>Games and controllers</h3>
+        <p>Running games can hold the idle plan automatically. Controller input counts as activity, including outside games.</p>
       </article>
       <article>
         <span>02</span>
-        <h3>Suspend-only holds</h3>
-        <p><code>suspend_inhibit_apps</code>, <code>suspend_inhibit_media</code>, and login1 idle inhibitors block sleep without freezing earlier plan steps.</p>
+        <h3>Native audio monitoring</h3>
+        <p>PipeWire monitoring keeps one connection open. Native PulseAudio remains available as a fallback.</p>
       </article>
       <article>
         <span>03</span>
-        <h3>Visible tray state</h3>
-        <p>The tray keeps a status row for hosts such as Waybar, and still shows <code>Stasis paused (manually)</code> when you pause it yourself.</p>
+        <h3>Your config stays yours</h3>
+        <p>Existing configuration files stay untouched. Use <code>stasis info</code> for session details and <code>stasis blame</code> for active blockers.</p>
       </article>
     </div>
   </section>
